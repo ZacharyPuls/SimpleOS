@@ -6,7 +6,7 @@ BITS 16
 
 JMP START
 
-; OEM Parameter Block
+; BIOS Parameter Block
 
 bpbOEM                       DB        "SimpleOS"
 
@@ -25,38 +25,23 @@ bpbTotalSectorsBig           DD        0
 bsDriveNumber                DB        0
 bsUnused                     DB        0
 bsExtBootSignature           DB        0x29
-bsSerialNumber               DD        0xA0A1A2A3
+bsSerialNumber               DD        0xFFFFFFFF
 bsVolumeLabel                DB        "MOS FLOPPY "
 bsFileSystem                 DB        "FAT12   "
 
 ; Data definitions
 
 VERSION_STR                  DB        "SimpleOS v0.1", 0
-COPYRIGHT_STR                DB        "Copyright (c) 2016 Zachary Puls", 0
+COPYRIGHT_STR                DB        "Copyright (c) 2016 Zachary Puls.", 0
 BLANKLN_STR                  DB        "", 0
 MISC_STR                     DB        "All rights reserved.", 0
+PROMPT_STR                   DB        "  >", 0
 
-LINE_NUMBER                  DB        1
-
-PRINTLN:
-    LODSB
-	OR AL, AL                ; Are we at the end of the string?
-	JZ ENDPRINTLN            ; If so, finish PRINTSTR.
-	MOV AH, 0x0E             ; TTY Output
-	INT 0x10
-	JMP PRINTLN
-	
-ENDPRINTLN:
-    MOV AH, 0x02
-	MOV DH, [LINE_NUMBER]
-	MOV DL, 0x00
-	INT 0x10
-	INC BYTE [LINE_NUMBER]
-	RET	
+%INCLUDE "println.asm"
 	
 START:
     MOV AX, 3
-	INT 0x10                 ; Clear screen.
+	INT 0x10                 ; Clear screen
 	
 	XOR AX, AX
 	MOV DS, AX
@@ -74,10 +59,23 @@ START:
 	MOV SI, MISC_STR
 	CALL PRINTLN
 	
-	CLI
-	HLT
+	MOV SI, BLANKLN_STR
+	CALL PRINTLN
 	
-times 510-($ - $$) db 0      ; Pad the file to 512 bytes.
+	MOV SI, PROMPT_STR
+	CALL PRINTLN
+	
+	MOV AH, 0x02
+	MOV DH, 0x05
+	MOV DL, 0x03
+	INT 0x10
+	INC BYTE [LINE_NUMBER]
+	
+	CLI
+	
+	
+times 510-($ - $$) db 0      ; Pad the file to 512 bytes
 
 
-dw 0xAA55                    ; Boot sector magic number.
+dw 0xAA55                    ; Boot sector magic number
+
