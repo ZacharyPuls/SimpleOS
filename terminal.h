@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 
+#include "memory.h"
 #include "string.h"
 #include "terminal_colors.h"
 
@@ -46,7 +47,7 @@ void __terminal_advance_x(struct __terminal *term) {
 }
 
 void __terminal_scroll(struct __terminal *term) {
-	
+	// TODO: Stub method
 }
 
 void __terminal_write(struct __terminal *term, char ch) {
@@ -89,6 +90,7 @@ struct __terminal __terminal_initialize(void) {
 	term.buffer = (uint16_t *) VGA_MEMORY_BASE;
 	term.width = 80;
 	term.height = 25;
+	term.buffer = __malloc(sizeof(uint16_t) * term.width * term.height); // TODO: Actually free the memory used by term.buffer when we're done with it.
 	__terminal_clear(&term);
 	return term;
 }
