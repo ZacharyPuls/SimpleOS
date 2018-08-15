@@ -1,4 +1,6 @@
 
+#include "multiboot.h"
+
 #include <stddef.h>
 #include <stdint.h>
 
@@ -13,6 +15,7 @@ static struct __terminal __stdout;
 
 void __println(const char *str) {
 	__terminal_writeln(&__stdout, str);
+	__terminal_flush(&__stdout);
 }
 
 void __kinit(void) {
@@ -20,6 +23,7 @@ void __kinit(void) {
 }
 
 void __kmain(void) {
+	// __init_kstack(0x5DC, 0x1F4); // Start at 1500 KiB, size of 500 KiB
 	__kinit();
 	__println(OS_VERSION_STRING);
 }

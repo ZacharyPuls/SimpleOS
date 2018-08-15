@@ -69,28 +69,41 @@ void __terminal_writeln(struct __terminal *term, const char *line) {
 }
 
 void __terminal_clear(struct __terminal *term) {
-	const size_t cursor_x = term->cursor.x;
-	const size_t cursor_y = term->cursor.y;
+	// const size_t cursor_x = term->cursor.x;
+	// const size_t cursor_y = term->cursor.y;
 	term->cursor.x = 0;
 	term->cursor.y = 0;
 	for (size_t y = 0; y < term->height; y++) {
 		for (size_t x = 0; x < term->width; x++) {
-			__terminal_write(term, ' ');
+			// __terminal_write(term, ' ');
+			const size_t idx = y * term->width + x;
+			term->buffer[idx] = __terminal_entry((unsigned char)' ', __terminal_color(COLOR_BLACK, COLOR_BLACK));
 		}
 	}
-	term->cursor.x = cursor_x;
-	term->cursor.y = cursor_y;
+	term->cursor.x = 0;
+	term->cursor.y = 0;
 }
 
-struct __terminal __terminal_initialize(void) {
+void __terminal_flush(struct __terminal *term) {
+	uint16_t *vga_memory = (uint16_t *)VGA_MEMORY_BASE;
+	for (size_t y = 0; y < term->height; y++) {
+		for (size_t x = 0; x < term->width; x++) {
+			const size_t idx = y * term->width + x;
+			*(vga_memory + idx * sizeof(uint16_t)) = term->buffer[idx];
+		}
+	}
+}
+
+inline static struct __terminal __terminal_initialize(void) {
 	struct __terminal term;
 	term.cursor.x = 0;
 	term.cursor.y = 0;
 	term.color = __terminal_color(COLOR_GREEN, COLOR_BLACK);
-	term.buffer = (uint16_t *) VGA_MEMORY_BASE;
+	// term.buffer = (uint16_t *) VGA_MEMORY_BASE;
 	term.width = 80;
 	term.height = 25;
-	term.buffer = __malloc(sizeof(uint16_t) * term.width * term.height); // TODO: Actually free the memory used by term.buffer when we're done with it.
+	// term.buffer = (uint16_t *)0x5DC;
+	term.buffer = (uint16_t *)__malloc(sizeof(uint16_t) * term.width * term.height); // TODO: Actually free the memory used by term.buffer when we're done with it.
 	__terminal_clear(&term);
 	return term;
 }
