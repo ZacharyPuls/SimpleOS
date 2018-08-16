@@ -14,18 +14,18 @@ void __init_kstack(const uint64_t base_address, const uint64_t size) {
 	// __build_stack_frame(__kstack, base_address, size); 
 }
 
-inline static uint16_t *__malloc(const size_t size) {
+inline static void *__malloc(const size_t size) {
 	// return (uint16_t *)__get_next_memory_addr(size);
 	// TODO: Actually malloc :)
-	uint16_t baseptr;
-	__asm__  (
+	uint32_t baseptr;
+	__asm__ __volatile__ (
 		"movl %%esp, %1\n\t"
 		"subl %0, %%esp"
 		: "=m"(baseptr)
 		: "r" (size)
 		: "esp"
 	);
-	return (uint16_t *)baseptr;
+	return (void *)baseptr;
 }
 
 void __free(const uint64_t *ptr) {
@@ -35,6 +35,38 @@ void __free(const uint64_t *ptr) {
 
 void __memcpy(unsigned char *src, unsigned char *dst) {
 	// TODO: Stub method
+}
+
+void __memset16(uint16_t *dst, const uint16_t value) {
+	do {
+		*dst = value;
+	} while (dst += sizeof(uint16_t));
+}
+
+void __memset16n(uint16_t *dst, const uint16_t value, const size_t size) {
+	size_t i = 0;
+	do {
+		*dst = value;
+	} while (dst += sizeof(uint16_t) && ++i < size);
+}
+
+void __memset8(uint8_t *dst, const uint8_t value, const size_t size) {
+	size_t i = 0;
+	do {
+		*dst = value;
+	} while (dst += sizeof(uint8_t) && ++i < size);
+}
+
+
+void __memset_c(char *dst, const char value) {
+
+}
+
+void __memset_cn(char *dst, const char value, const size_t size) {
+	size_t i = 0;
+	do {
+		*dst = value;
+	} while (dst -= sizeof(char) && ++i < size);
 }
 
 #endif

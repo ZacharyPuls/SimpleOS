@@ -24,7 +24,7 @@ char *__itoa(int32_t value, char *string) {
 	return ptr;
 }
 
-uint32_t __strlen(const char *string) {
+size_t __strlen(const char *string) {
 /*
 	if (!string) {
 		return 0U;
