@@ -1,5 +1,5 @@
 OUTPUT_FORMAT("binary")
-ENTRY(__start)
+ENTRY(__START)
 kernel_start = 0x00010000;
 SECTIONS {
 	.text kernel_start : AT(kernel_start) {

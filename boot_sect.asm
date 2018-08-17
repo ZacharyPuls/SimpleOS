@@ -4,30 +4,7 @@
 ORG 0x7C00
 BITS 16
 
-JMP START
-
-; BIOS Parameter Block
-
-bpbOEM                       DB        "SimpleOS"
-
-bpbBytesPerSector            DW        512
-bpbSectorsPerCluster         DB        1
-bpbReservedSectors           DW        1
-bpbNumberOfFATs              DB        2
-bpbRootEntries               DW        224
-bpbTotalSectors              DW        2880
-bpbMedia                     DB        0xF0				; Ignored for FAT12
-bpbSectorsPerFAT             DW        9
-bpbSectorsPerTrack           DW        18
-bpbHeadsPerCylinder          DW        2
-bpbHiddenSectors             DD        0				; Ignored for FAT12
-bpbTotalSectorsBig           DD        0				; Always 0 for FAT12
-bsDriveNumber                DB        0				; Ignored for FAT12
-bsUnused                     DB        0				; Ignored for FAT12
-bsExtBootSignature           DB        0x29
-bsSerialNumber               DD        0xFFFFFFFF		; Should be generated. Used to detect whether the wrong disk is inserted (Volume Tracking)
-bsVolumeLabel                DB        "MOS FLOPPY "	; Also helps with Volume Tracking
-bsFileSystem                 DB        "FAT12   "		
+JMP __START
 
 ; Data definitions
 
@@ -79,15 +56,32 @@ ENDPRINTLN:
 	RET	
 
 GLOBAL_DESCRIPTOR_TABLE:
-	DW		0x04											; Segment Limit (16 low-order bits), 4 pages
-	DW		0													; Base Address (16 low-order bits)
-	DB		0, 0, 0, 0								; 
+	; Null Segment (Selector = 0x00)
+	DQ		0x0000000000000000, 0x0000000000000000		; Zero everything out
+	; Code Segment (Selector = 0x08)
+	DW		0x04											; Segment Limit (16 low-order bits), 0x0004 pages (4KiB * 4 pages = 16KiB)
+	DW		0x0000										; Base Address (16 low-order bits), 0x0000
+	DB		0x01											; Base Address (bits 16-23), 0x01 makes the base address 0x10000 (64KiB)
+	DB		0x9A											; Access Byte, 0x9A = code segment
+	DB		0xC0											; Limit (4 high-order bits) and Flags (4 bits), 0xC0 = 4KiB page, 32-bit protected mode
+	DB		0x00											; Base Address (8 high-order bits), 0x00
+	; Data Segment (Selector = 0x10)
+	DW		0x04											; Segment Limit (16 low-order bits), 0x0004 pages (4KiB * 4 pages = 16KiB)
+	DW		0x0000										; Base Address (16 low-order bits), 0x0000
+	DB		0x01											; Base Address (bits 16-23), 0x01 makes the base address 0x10000 (64KiB)
+	DB		0x92											; Access Byte, 0x92 = data segment
+	DB		0xC0											; Limit (4 high-order bits) and Flags (4 bits), 0xC0 = 4KiB page, 32-bit protected mode
+	DB		0x00											; Base Address (8 high-order bits), 0x00
+	; TSS (Selector = 0x18)
+	; TODO: TSS									
+
+GDT_SIZE		DW		$ - GLOBAL_DESCRIPTOR_TABLE
 
 GDT_DESCRIPTOR:
-	DW 0x27												; GDT limit
-	DQ GLOBAL_DESCRIPTOR_TABLE			; Pointer to address of GDT
+	DW GDT_SIZE													; GDT size
+	DQ GLOBAL_DESCRIPTOR_TABLE					; Pointer to address of GDT
 
-START:
+__START:
 
 	CALL INITSCRN
 	CALL CLRSCRN
@@ -113,8 +107,22 @@ START:
 	
 	MOV SI, BLANKLN_STR
 	CALL PRINTLN
-	
-	CLI
+
+	; Enter Protected Mode
+	CLI										; Disable interrupts
+	LGDT [GDT_DESCRIPTOR] ; Load Global Descriptor Table
+	MOV EAX, CR0
+	OR AL, 0x01
+	MOV CR0, EAX
+
+	; Set registers and JMP to kernel
+	MOV AX, 0x10
+	MOV DS, AX
+	MOV ES, AX
+	MOV FS, AX
+	MOV GS, AX
+	MOV SS, AX
+	JMP 8:0x10000
 
 	
 TIMES 510-($ - $$) DB 0      ; Pad the file to 512 bytes

@@ -1,5 +1,6 @@
 
 #include <stddef.h>
+#include <stdint.h>
 
 #define MAX_COLUMNS 80
 #define MAX_LINES 25
@@ -48,8 +49,8 @@ uint32_t __strlen(char *string) {
 
 void print_character(uint8_t character, uint8_t attributes, uint8_t row, uint8_t column) {
 	uint32_t offset = position_to_memory_offset(row, column);
-	*(offset) = character;
-	*(offset + 1) = attributes;
+	*((volatile char *)offset) = character;
+	*((volatile char *)offset + 1) = attributes;
 }
 
 void print_string(char *string, uint8_t row, uint8_t column) {
