@@ -5,15 +5,6 @@
 
 #include "stack.h"
 
-#define KSTACK_BASE_ADDRESS 0x5000
-#define KSTACK_SIZE 0x2000
-
-// static struct __stack *__kstack;
-
-void __init_kstack(const uint64_t base_address, const uint64_t size) {
-	// __build_stack_frame(__kstack, base_address, size); 
-}
-
 inline static void *__malloc(const size_t size) {
 	// return (uint16_t *)__get_next_memory_addr(size);
 	// TODO: Actually malloc :)
@@ -26,15 +17,6 @@ inline static void *__malloc(const size_t size) {
 		: "esp"
 	);
 	return (void *)baseptr;
-}
-
-void __free(const uint64_t *ptr) {
-	// TODO: Stub method
-	// __pop(__kstack, *ptr);
-}
-
-void __memcpy(unsigned char *src, unsigned char *dst) {
-	// TODO: Stub method
 }
 
 void __memset16(uint16_t *dst, const uint16_t value) {
@@ -55,11 +37,6 @@ void __memset8(uint8_t *dst, const uint8_t value, const size_t size) {
 	do {
 		*dst = value;
 	} while (dst += sizeof(uint8_t) && ++i < size);
-}
-
-
-void __memset_c(char *dst, const char value) {
-
 }
 
 void __memset_cn(char *dst, const char value, const size_t size) {

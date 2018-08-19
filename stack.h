@@ -59,7 +59,8 @@ inline uint64_t __push(struct __stack *stack, const uint64_t size) {
 
 inline void __pop(struct __stack *stack, const uint64_t address) {
 	// TODO: Research better ways of freeing memory
-	
+	stack->base_addr = address;
+	stack->top -= sizeof(uint64_t);
 }
 
 inline void __build_stack_frame(struct __stack *stack, const uint64_t base_address, const uint64_t size) {

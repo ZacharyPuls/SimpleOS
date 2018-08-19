@@ -1,6 +1,7 @@
 #ifndef __SIMPLEOS_TERMINAL_H__
 #define __SIMPLEOS_TERMINAL_H__
 
+#include <stdbool.h>
 #include <stdint.h>
 
 #include "memory.h"
@@ -59,7 +60,7 @@ void __terminal_advance_x(struct __terminal *term) {
 	}
 }
 
-void __terminal_write(struct __terminal *term, char ch) {
+void __terminal_writech(struct __terminal *term, char ch) {
 	if (ch == '\n') {
 		__terminal_advance_y(term);
 		return;
@@ -69,12 +70,18 @@ void __terminal_write(struct __terminal *term, char ch) {
 	__terminal_advance_x(term);
 }
 
-void __terminal_writeln(struct __terminal *term, const char *line) {
+void __terminal_write(struct __terminal *term, const char *line, bool advance) {
 	const size_t len = __strlen(line);
 	for (size_t i = 0; i < len; i++) {
-		__terminal_write(term, line[i]);
+		__terminal_writech(term, line[i]);
 	}
-	__terminal_advance_y(term);
+	if (advance) {
+		__terminal_advance_y(term);
+	}
+}
+
+void __terminal_writeln(struct __terminal *term, const char *line) {
+	__terminal_write(term, line, true);
 }
 
 void __terminal_clear(struct __terminal *term) {

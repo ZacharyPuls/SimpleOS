@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "string.h"
+
 typedef struct __cpuid {
     uint32_t eax;
     uint32_t ebx;
@@ -117,7 +119,11 @@ typedef struct __cpuid {
  *  bit 31: PBE                     (Pending Break Enable, support for the use of the FERR#/PBE# pin when the processor is in the stop-clock state [STPCLK# is asserted], which signals the processor that an interrupt is pending and that the processor should return to normal operation to handle it, IA32_MISC_ENABLE MSR [bit 10/PBE enable] controls feature)
  */
 
-#define __CPUID_OPERATION_VERSION_AND_FEATURE_INFORMATION__ 0x01
+#define __CPUID_OPERATION_VERSION_AND_FEATURE_INFORMATION__ 0x00000001
+#define __CPUID_OPERATION_EXTENDED_INFORMATION__            0x80000000
+#define __CPUID_OPERATION_BRAND_STRING_A__                  0x80000002
+#define __CPUID_OPERATION_BRAND_STRING_B__                  0x80000003
+#define __CPUID_OPERATION_BRAND_STRING_C__                  0x80000004
 
 #define __CPUID_VERSION_STEPPING_ID__           0x0000000F
 #define __CPUID_VERSION_MODEL_ID__              0x000000F0
@@ -134,10 +140,10 @@ typedef enum __processor_type {
 } __processor_type_t;
 
 #define __CPUID_FAMILY_ID__(familyid, familyid_ext) \
-        (familyid == 0xF ? familyid_ext + familyid : familyid)
+        (familyid == 0xF ? (familyid_ext + familyid) : familyid)
 
 #define __CPUID_MODEL_ID__(modelid, modelid_ext) \
-        (modelid == 0x6 || modelid == 0xF ? (modelid_ext << 4) + modelid : modelid)
+        (modelid == 0x6 || modelid == 0xF ? ((modelid_ext << 4) + modelid) : modelid)
 
 
 #define __CPUID_VERSION_BRAND_INDEX__       0x000000FF
@@ -209,17 +215,25 @@ typedef enum __processor_type {
 #define __CPUID_FEATURE_SUPPORTED__(x, feature) \
     ((bool)(x & feature ? true : false))
 
+#define __CPUID_BRAND_STRING_FREQUENCY_MULTIPLIER__(x) \
+    ((x == "zHM") ? 1e6 : (x == "zHG") ? 1e9 : (x == "zHT") ? 1e12 : 0)
+
 typedef struct __cpuinfo {
     uint8_t stepping_id;
     uint8_t model_id;
     uint8_t family_id;
     __processor_type_t type;
     uint8_t brand_index;
+    char *brand_string;
     uint8_t clflush_line_size;
     uint8_t max_addressable_ids;
     uint8_t initial_apic_id;
     uint32_t supported_features;
     uint32_t supported_features_ext;
 } __cpuinfo_t;
+
+extern bool __cpuid_supported();
+extern __cpuid_t __get_cpuid(const uint32_t);
+extern __cpuinfo_t __get_cpuinfo();
 
 #endif
