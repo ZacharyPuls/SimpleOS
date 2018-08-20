@@ -10,7 +10,7 @@ void *malloc(size_t n) {
         "mov %%esp, %1\n"
         "sub %0, %%esp\n"
         : "=&m" (ptr)
-        : "i" (n)
+        : "r" (n)
         : "esp"
     );
 

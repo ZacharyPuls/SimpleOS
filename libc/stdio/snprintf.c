@@ -1,5 +1,6 @@
 
 #include <stdio.h>
+#include <string.h>
 
 /**
  * @brief Composes a string with the same text that would be printed if fmt was
