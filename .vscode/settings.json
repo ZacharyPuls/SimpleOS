@@ -6,6 +6,8 @@
         "cpuid.h": "c",
         "types.h": "c",
         "locale.h": "c",
-        "mman.h": "c"
+        "mman.h": "c",
+        "tty.h": "c",
+        "signal.h": "c"
     }
 }

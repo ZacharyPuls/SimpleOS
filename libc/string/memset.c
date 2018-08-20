@@ -10,5 +10,12 @@
  * @return void*    ptr
  */
 void *memset(void *ptr, int val, size_t n) {
+    unsigned char *buf = (unsigned char *)ptr;
+    size_t i = 0;
+
+    do {
+        *buf = (unsigned char)val;
+    } while (++buf && ++i < n);
+
     return ptr;
 }
