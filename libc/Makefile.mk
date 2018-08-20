@@ -1,6 +1,8 @@
 SHELL = /bin/sh
 
-HOSTARCH = i386
+DEFAULT_HOST = ../default-host.sh
+HOST ?= DEFAULT_HOST
+HOSTARCH = ../target-triplet-to-arch.sh $(HOST)
 
 DESTDIR ?=
 PREFIX ?= /usr/local

@@ -1,6 +1,8 @@
 SHELL = /bin/sh
 
-HOSTARCH = i386
+DEFAULT_HOST = ../default-host.sh
+HOST ?= DEFAULT_HOST
+HOSTARCH = ../target-triplet-to-arch.sh $(HOST)
 
 DESTDIR ?=
 PREFIX ?= /usr/local
@@ -53,8 +55,8 @@ LINK_LIST = $(KERNEL_LDFLAGS) \
 all: simpleos.kernel
 
 simpleos.kernel: 
-	$(OBJS) $(ARCHDIR)/linker.ld 
-	$(CC) -T $(ARCHDIR)/linker.ld -o $@ $(KERNEL_CFLAGS) $(LINK_LIST)
+	$(OBJS) $(ARCHDIR)/link.ld 
+	$(CC) -T $(ARCHDIR)/link.ld -o $@ $(KERNEL_CFLAGS) $(LINK_LIST)
 	grub-file --is-x86-multiboot simpleos.kernel
 
 $(ARCHDIR)/crtbegin.o $(ARCHDIR)/crtend.o: 
