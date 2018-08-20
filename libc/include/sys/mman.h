@@ -50,4 +50,17 @@ extern int posix_typed_mem_open(const char *, int, int);
 extern int shm_open(const char *, int, mode_t);
 extern int shm_unlink(const char *);
 
+__attribute__((packed))
+typedef struct __memmap_region {
+  uint64_t base;
+  uint64_t length;
+  uint32_t type;
+  uint32_t acpi_extended_attributes;
+  /* For ACPI 3.0 Extended Attributes field (only when the 0x15/0xE820 interrupt returns 24 bytes).*
+   * This is not used for now, as ACPI 3.0 is not common in current hardware.                      *
+   * If this field were going to be used, the first bit (bit 0) would indicate whether or not the  *
+   * entry should be ignored (0/clear = ignore), and the second bit (bit 1) would indicate whether *
+   * or not the entry is NVRAM (1/set = NVRAM)													   */
+} __memmap_region_t;
+
 #endif
