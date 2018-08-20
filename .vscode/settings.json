@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "stdint.h": "c",
+        "string.h": "c",
+        "stddef.h": "c",
+        "cpuid.h": "c",
+        "types.h": "c",
+        "locale.h": "c",
+        "mman.h": "c"
+    }
+}
