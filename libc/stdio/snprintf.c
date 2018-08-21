@@ -1,14 +1,15 @@
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 char *hexstr(int n) {
-	char buf[16]; // TODO: better method that doesn't waste memory on the stack
+	char *buf = (char *)malloc(sizeof(char) * 16); // TODO: better method that doesn't waste memory on the stack
 	int i = 15;
     int j = 0;
 
-	buf[i--] = "0";
-	buf[i--] = "x";
+	buf[i--] = '0';
+	buf[i--] = 'x';
 
     do {
         buf[i] = "0123456789ABCDEF"[n % 16];
@@ -63,7 +64,7 @@ int snprintf(char *restrict str, size_t n, const char *restrict fmt, ...) {
 				// TODO: Set errno to EOVERFLOW.
 				return -1;
 			}
-            for (int i = 0; i < amount; i++) {
+            for (size_t i = 0; i < amount; i++) {
                 str[done + i] = fmt[i];
             }
 			fmt += amount;
@@ -90,7 +91,7 @@ int snprintf(char *restrict str, size_t n, const char *restrict fmt, ...) {
 				// TODO: Set errno to EOVERFLOW.
 				return -1;
 			}
-            for (int i = 0; i < len; i++) {
+            for (size_t i = 0; i < len; i++) {
                 str[done + i] = str_[i];
             }
 			done += len;
@@ -99,7 +100,7 @@ int snprintf(char *restrict str, size_t n, const char *restrict fmt, ...) {
 			int i = va_arg(parameters, int);
 			const char *hexstr_ = hexstr(i);
 			size_t len = strlen(hexstr_);
-			for (int x = 0; x < len; x++) {
+			for (size_t x = 0; x < len; x++) {
 				str[done + x] = hexstr_[x];
 			}
 			done += len;
@@ -110,7 +111,7 @@ int snprintf(char *restrict str, size_t n, const char *restrict fmt, ...) {
 				// TODO: Set errno to EOVERFLOW.
 				return -1;
 			}
-            for (int i = 0; i < len; i++) {
+            for (size_t i = 0; i < len; i++) {
                 str[done + i] = fmt[i];
             }
 			done += len;

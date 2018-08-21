@@ -15,7 +15,7 @@ void *memset(void *ptr, int val, size_t n) {
 
     do {
         *buf = (unsigned char)val;
-    } while (++buf && ++i < n);
+    } while (buf -= sizeof(unsigned char) && ++i < n);
 
     return ptr;
 }

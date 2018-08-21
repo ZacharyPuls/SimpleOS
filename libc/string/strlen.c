@@ -12,4 +12,5 @@ size_t strlen(const char *str) {
     while (str[len]) {
         ++len;
     };
+    return len;
 }

@@ -3,4 +3,4 @@
 set -e
 . ./iso.sh
 
-qemu-system-$(./target-triplet-to-arch.sh $HOST) -cdrom simpleos.iso
+qemu-system-$(./target-triplet-to-arch.sh $HOST) -vnc :0 -cdrom simpleos.iso
