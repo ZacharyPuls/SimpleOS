@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 const char *OS_VERSION_STRING = "SimpleOS v0.1.0\n    Running SimpleKernel v0.1.0\nCopyright (c) 2018 Zachary Puls\n";
 
@@ -37,7 +38,10 @@ void __kmain(void) {
 		tty_writeln(&console, family);		
 		*/
 
-		char *stepping = malloc()
+		char *stepping = (char *)malloc(sizeof(char) * 32);
+		stepping = snprintf(stepping, 32, "Stepping: 0x%X", cpuinfo.stepping_id);
+		tty_writeln(&console, stepping);
+
 	} else {
 		tty_writeln(&console, "CPUID Instruction is not supported.\n");
 	}

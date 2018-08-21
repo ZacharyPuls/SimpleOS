@@ -88,6 +88,7 @@ char *__get_cpuid_brandinfo() {
         brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.edx));
     } else {
         // Brand string method unsupported, TODO: fall back to brand index table.
+        brandinfo[0] = '\0';
     }
     return brandinfo;
 }
@@ -100,7 +101,7 @@ __cpuinfo_t __get_cpuinfo() {
         .family_id = __CPUID_FAMILY_ID__((cpuid_info.eax & __CPUID_VERSION_FAMILY_ID__), (cpuid_info.eax & __CPUID_VERSION_EXTENDED_FAMILY_ID__)),
         .type = (__processor_type_t)(cpuid_info.eax & __CPUID_VERSION_TYPE__),
         .brand_index = cpuid_info.ebx & __CPUID_VERSION_BRAND_INDEX__,
-        .brand_string = __get_cpuid_brandinfo(),
+        .brand_string = "",
         .clflush_line_size = cpuid_info.ebx & __CPUID_VERSION_CLFLUSH_LINE_SIZE__,
         .max_addressable_ids = cpuid_info.ebx & __CPUID_VERSION_ADDRESSABLE_IDS__,
         .initial_apic_id = cpuid_info.ebx & __CPUID_VERSION_INITIAL_APIC_ID__,

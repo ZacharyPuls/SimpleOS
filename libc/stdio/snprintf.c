@@ -5,24 +5,25 @@
 
 char *hexstr(unsigned int n) {
 	char *buf = (char *)malloc(sizeof(char) * 16); // TODO: better method that doesn't waste memory on the stack
-	int i = 15;
-    int j = 0;
+	unsigned int base = 16;
+	unsigned int d = 1;
+	int x = 0;
 
-	buf[i--] = '0';
-	buf[i--] = 'x';
+	while (n / d >= base) {
+		d *= base;
+	}
 
-    do {
-        buf[i] = "0123456789ABCDEF"[n % 16];
-        i--;
-        n /= 16;
-    } while(n > 0);
+	while (d != 0) {
+		int dgt = n / d;
+		n %= d;
+		d /= base;
+		if (x || dgt > 0 || d == 0) {
+			*buf++ = dgt + (dgt < 10 ? '0' : 'A' - 10);
+			++x;
+		}
+	}
 
-    while( ++i < 13){
-       buf[j++] = buf[i];
-    }
-
-    buf[j] = 0;
-
+	*buf = 0;
 	return buf;
 }
 
@@ -57,18 +58,22 @@ int snprintf(char *restrict str, size_t n, const char *restrict fmt, ...) {
 			++done;
 		} else {
 			ch = *(fmt++);
+			int type = 0;
 			switch (ch) {
 				case 'x':
 				case 'X':
-					char *buf = hexstr(va_arg(parameters, unsigned int));
-					size_t len = strlen(buf);
-					for (size_t i = 0; i < len; i++) {
-						str[done + i] = buf[i];
-					}
-					done += len;
+					type = 1;
 					break;
 				default:
 					break;
+			}
+			if (type == 1) {
+				char *buf = hexstr(va_arg(parameters, unsigned int));
+				size_t len = strlen(buf);
+				for (size_t i = 0; i < len; i++) {
+					str[done + i] = buf[i];
+				}
+				done += len;
 			}
 		}
 	}
