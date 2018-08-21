@@ -1,21 +1,19 @@
-SHELL = /bin/sh
+DEFAULT_HOST!=../default-host.sh
+HOST?=DEFAULT_HOST
+HOSTARCH!=../target-triplet-to-arch.sh $(HOST)
 
-DEFAULT_HOST = $(shell ../default-host.sh)
-HOST ?= DEFAULT_HOST
-HOSTARCH = $(shell ../target-triplet-to-arch.sh $(HOST))
+DESTDIR?=
+PREFIX?=/usr/local
+EXEC_PREFIX?=$(PREFIX)
+INCLUDEDIR?=$(PREFIX)/include
+LIBDIR?=$(EXEC_PREFIX)/lib
+ARCHDIR=arch/$(HOSTARCH)
 
-DESTDIR ?=
-PREFIX ?= /usr/local
-EXEC_PREFIX ?= $(PREFIX)
-INCLUDEDIR ?= $(PREFIX)/include
-LIBDIR ?= $(EXEC_PREFIX)/lib
-ARCHDIR = arch/$(HOSTARCH)
+CFLAGS?=-O2 -g
+CXXFLAGS?=
 
-CFLAGS ?= -O2 -g
-CXXFLAGS ?=
-
-DEFAULT_CFLAGS = -ffreestanding -Wall -Wextra
-DEFAULT_CXXFLAGS = -Iinclude
+DEFAULT_CFLAGS=-ffreestanding -Wall -Wextra
+DEFAULT_CXXFLAGS=-Iinclude
 
 ALL_CFLAGS = $(CFLAGS) $(DEFAULT_CFLAGS)
 ALL_CXXFLAGS = $(CXXFLAGS) $(DEFAULT_CXXFLAGS)
@@ -91,41 +89,41 @@ string/strxfrm_l.o \
 string/strxfrm.o \
 
 HOSTEDOBJS=\
-$(ARCH_FREEOBJS) \
+$(ARCH_HOSTEDOBJS) \
 
 OBJS=\
 $(FREEOBJS) \
 $(HOSTEDOBJS) \
 
-LIBSOS_OBJS = $(FREEOBJS:.o=.libsos.o)
+LIBSOS_OBJS=$(FREEOBJS:.o=.libsos.o)
 
-BINARIES = libsos.a
+BINARIES=libsos.a
 
 .PHONY: all clean install install-headers install-libs
 .SUFFIXES:
-.SUFFIXES: .c .o .libsos.o .S
+.SUFFIXES: .o .libsos.o .c .S
 
 all: $(BINARIES)
 
 libc.a: $(OBJS)
-		$(AR) rcs $@ $(OBJS)
+	$(AR) rcs $@ $(OBJS)
 
 libsos.a: $(LIBSOS_OBJS)
-		  $(AR) rcs $@ $(LIBSOS_OBJS)
+	$(AR) rcs $@ $(LIBSOS_OBJS)
 
-.c.o: 
+.c.o:
 	$(CC) -MD -c $< -o $@ -std=gnu11 $(LIBC_CFLAGS) $(LIBC_CXXFLAGS)
 
-.c.S: 
+.c.S:
 	$(CC) -MD -c $< -o $@ $(LIBC_CFLAGS) $(LIBC_CXXFLAGS)
 
-.c.libsos.o: 
+.c.libsos.o:
 	$(CC) -MD -c $< -o $@ -std=gnu11 $(LIBSOS_CFLAGS) $(LIBSOS_CXXFLAGS)
 
-.S.libsos.o: 
+.S.libsos.o:
 	$(CC) -MD -c $< -o $@ $(LIBSOS_CFLAGS) $(LIBSOS_CXXFLAGS)
 
-clean: 
+clean:
 	rm -f $(BINARIES) *.a
 	rm -f $(OBJS) $(LIBSOS_OBJS) *.o */*.o */*/*.o
 	rm -f $(OBJS:.o=.d) $(LIBSOS_OBJS:.o=.d) *.d */*.d */*/*.d

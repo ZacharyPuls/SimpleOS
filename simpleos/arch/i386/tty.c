@@ -15,7 +15,7 @@ void tty_scroll(tty_t *tty) {
 		}
 	}
 
-	memset(tty->buffer + (tty->height - 1) * tty->width, ' ', tty->width);
+	memset(&tty->buffer[(tty->height - 1) * tty->width], ' ', tty->width);
 }
 
 void tty_advance(tty_t *tty, size_t x, size_t y) {
@@ -69,7 +69,7 @@ void tty_flush(tty_t *tty) {
 	for (size_t y = 0; y < tty->height; ++y) {
 		for (size_t x = 0; x < tty->width; ++x) {
 			const size_t idx = y * tty->width + x;
-			*(vga_memory + idx) = TTY_ENTRY((unsigned char)tty->buffer[idx], tty->color);
+			vga_memory[idx] = TTY_ENTRY((unsigned char)tty->buffer[idx], tty->color);
 		}
 	}
 }

@@ -1,13 +1,10 @@
 
-#include <asm/cpuid.h>
+// #include <asm/cpuid.h>
 #include <asm/tty.h>
 
 #include <stdio.h>
 
 const char *OS_VERSION_STRING = "SimpleOS v0.1.0\n    Running SimpleKernel v0.1.0\nCopyright (c) 2018 Zachary Puls\n";
-
-const char *OS_VERSION = "SimpleOS v0.1.0";
-const char *KERNEL_VERSION = "Running SimpleKernel v0.1.0";
 
 static tty_t console;
 
@@ -21,11 +18,11 @@ void __kinit(void) {
 }
 
 void __kmain(void) {
-	// __init_kstack(0x5DC, 0x1F4); // Start at 1500 KiB, size of 500 KiB
 	__kinit();
 	__println(OS_VERSION_STRING);
 
-	if (false/*__cpuid_supported() == 1U*/) {
+	/*
+	if (__cpuid_supported() == 1U) {
 		__cpuinfo_t cpuinfo = __get_cpuinfo();
 
 		char stepping[32];
@@ -40,7 +37,7 @@ void __kmain(void) {
 		tty_writeln(&console, family);
 
 		tty_flush(&console);
-		/*
+		
 		__string_t model = __string_create();
 		char *model_val = __malloc(sizeof(char) * 4);
 		__itos(cpuinfo.model_id, 16, model_val);
@@ -54,8 +51,9 @@ void __kmain(void) {
 		__string_append(&family, "Family: ");
 		__string_append(&family, family_val);
 		__terminal_writeln(&__stdout, family.buffer);
-		*/
+		
 	} else {
 		__println("CPUID Instruction is not supported.\n");
 	}
+	*/
 }
