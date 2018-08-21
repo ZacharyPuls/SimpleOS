@@ -35,7 +35,7 @@ void tty_advance(tty_t *tty, size_t x, size_t y) {
 
 void tty_write(tty_t *tty, char ch) {
     if (ch == '\n') {
-		tty_advance(tty, 0, 1);
+		tty_advance(tty, -tty->cursor.x, 1);
 		return;
 	}
 	const size_t idx = tty->cursor.y * tty->width + tty->cursor.x;

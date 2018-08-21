@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *hexstr(int n) {
+char *hexstr(unsigned int n) {
 	char *buf = (char *)malloc(sizeof(char) * 16); // TODO: better method that doesn't waste memory on the stack
 	int i = 15;
     int j = 0;
@@ -50,75 +50,28 @@ int snprintf(char *restrict str, size_t n, const char *restrict fmt, ...) {
 
     va_start(parameters, fmt);
 
-    while (*fmt != '\0') {
-        // TODO: Create limits.h, define INT_MAX
-		size_t maxrem = 0xFFFFFFFF - done;
- 
-		if (fmt[0] != '%' || fmt[1] == '%') {
-			if (fmt[0] == '%')
-				fmt++;
-			size_t amount = 1;
-			while (fmt[amount] && fmt[amount] != '%')
-				amount++;
-			if (maxrem < amount) {
-				// TODO: Set errno to EOVERFLOW.
-				return -1;
-			}
-            for (size_t i = 0; i < amount; i++) {
-                str[done + i] = fmt[i];
-            }
-			fmt += amount;
-			done += amount;
-			continue;
-		}
- 
-		const char* fmt_begun_at = fmt++;
- 
-		if (*fmt == 'c') {
-			fmt++;
-			char c = (char) va_arg(parameters, int /* char promotes to int */);
-			if (!maxrem) {
-				// TODO: Set errno to EOVERFLOW.
-				return -1;
-			}
-            str[done] = c;
-			done++;
-		} else if (*fmt == 's') {
-			fmt++;
-			const char* str_ = va_arg(parameters, const char*);
-			size_t len = strlen(str_);
-			if (maxrem < len) {
-				// TODO: Set errno to EOVERFLOW.
-				return -1;
-			}
-            for (size_t i = 0; i < len; i++) {
-                str[done + i] = str_[i];
-            }
-			done += len;
-		} else if (*fmt == 'x') {
-			fmt++;
-			int i = va_arg(parameters, int);
-			const char *hexstr_ = hexstr(i);
-			size_t len = strlen(hexstr_);
-			for (size_t x = 0; x < len; x++) {
-				str[done + x] = hexstr_[x];
-			}
-			done += len;
+	char ch;
+	while ((ch = *(fmt++))) {
+		if (ch != '%') {
+			str[done] = ch;
+			++done;
 		} else {
-			fmt = fmt_begun_at;
-			size_t len = strlen(fmt);
-			if (maxrem < len) {
-				// TODO: Set errno to EOVERFLOW.
-				return -1;
+			ch = *(fmt++);
+			switch (ch) {
+				case 'x':
+				case 'X':
+					char *buf = hexstr(va_arg(parameters, unsigned int));
+					size_t len = strlen(buf);
+					for (size_t i = 0; i < len; i++) {
+						str[done + i] = buf[i];
+					}
+					done += len;
+					break;
+				default:
+					break;
 			}
-            for (size_t i = 0; i < len; i++) {
-                str[done + i] = fmt[i];
-            }
-			done += len;
-			fmt += len;
 		}
 	}
-
     va_end(parameters);
 
     return done;
