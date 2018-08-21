@@ -1,5 +1,10 @@
 
-#include "cpuid.h"
+#include <asm/cpuid.h>
+
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 
 /*
  * Set the 21st bit of the EFLAGS register (ID bit), then read it back and 
@@ -62,25 +67,25 @@ char *__parse_brandinfo_segment(uint32_t segment) {
 }
 
 char *__get_cpuid_brandinfo() {
-    char brandinfo[48];
+    char *brandinfo = (char *)malloc(sizeof(char) * 48);
     uint32_t maxinput = __get_cpuid_max_extended_input_value();
     if (maxinput & __CPUID_OPERATION_EXTENDED_INFORMATION__) {
         // Brand string method supported.
         __cpuid_t string = __get_cpuid(__CPUID_OPERATION_BRAND_STRING_A__);
-        __strapp(brandinfo, __parse_brandinfo_segment(string.eax), 4);
-        __strapp(brandinfo, __parse_brandinfo_segment(string.ebx), 4);
-        __strapp(brandinfo, __parse_brandinfo_segment(string.ecx), 4);
-        __strapp(brandinfo, __parse_brandinfo_segment(string.edx), 4);
+        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.eax));
+        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.ebx));
+        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.ecx));
+        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.edx));
         string = __get_cpuid(__CPUID_OPERATION_BRAND_STRING_B__);
-        __strapp(brandinfo, __parse_brandinfo_segment(string.eax), 4);
-        __strapp(brandinfo, __parse_brandinfo_segment(string.ebx), 4);
-        __strapp(brandinfo, __parse_brandinfo_segment(string.ecx), 4);
-        __strapp(brandinfo, __parse_brandinfo_segment(string.edx), 4);
+        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.eax));
+        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.ebx));
+        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.ecx));
+        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.edx));
         string = __get_cpuid(__CPUID_OPERATION_BRAND_STRING_C__);
-        __strapp(brandinfo, __parse_brandinfo_segment(string.eax), 4);
-        __strapp(brandinfo, __parse_brandinfo_segment(string.ebx), 4);
-        __strapp(brandinfo, __parse_brandinfo_segment(string.ecx), 4);
-        __strapp(brandinfo, __parse_brandinfo_segment(string.edx), 4);
+        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.eax));
+        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.ebx));
+        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.ecx));
+        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.edx));
     } else {
         // Brand string method unsupported, TODO: fall back to brand index table.
     }

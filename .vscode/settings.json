@@ -8,6 +8,10 @@
         "locale.h": "c",
         "mman.h": "c",
         "tty.h": "c",
-        "signal.h": "c"
-    }
+        "signal.h": "c",
+        "stdbool.h": "c",
+        "malloc.h": "c",
+        "stdlib.h": "c"
+    },
+    "files.eol": "\n"
 }

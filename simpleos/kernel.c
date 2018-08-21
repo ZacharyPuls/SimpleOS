@@ -1,21 +1,23 @@
 
-#include <simpleos/cpuid.h>
-#include <simpleos/tty.h>
+#include <asm/cpuid.h>
+#include <asm/tty.h>
+
+#include <stdio.h>
 
 const char *OS_VERSION_STRING = "SimpleOS v0.1.0\n    Running SimpleKernel v0.1.0\nCopyright (c) 2018 Zachary Puls\n";
 
 const char *OS_VERSION = "SimpleOS v0.1.0";
 const char *KERNEL_VERSION = "Running SimpleKernel v0.1.0";
 
-static tty_t stdout;
+static tty_t console;
 
 void __println(const char *str) {
-	tty_writeln(&stdout, str);
-	tty_flush(&stdout);
+	tty_writeln(&console, str);
+	tty_flush(&console);
 }
 
 void __kinit(void) {
-	stdout = tty_init();
+	console = tty_init();
 }
 
 void __kmain(void) {
@@ -23,25 +25,21 @@ void __kmain(void) {
 	__kinit();
 	__println(OS_VERSION_STRING);
 
-	if (__cpuid_supported() == 1U) {
+	if (false/*__cpuid_supported() == 1U*/) {
 		__cpuinfo_t cpuinfo = __get_cpuinfo();
 
 		char stepping[32];
 		char model[32];
 		char family[32];
-		__itos(cpuinfo.stepping_id, 16U, stepping);
-		__itos(cpuinfo.model_id, 16U, model);
-		__itos(cpuinfo.family_id, 16U, family);
+		snprintf(stepping, 32, "Stepping: %x", cpuinfo.stepping_id);
+		snprintf(model, 32, "Model: %x", cpuinfo.model_id);
+		snprintf(family, 32, "Family: %x", cpuinfo.family_id);
 
-		tty_write(&stdout, cpuinfo.brand_string, true);
-		tty_write(&stdout, "Stepping: 0x", false);
-		tty_write(&stdout, stepping, true);
-		tty_write(&stdout, "Model: 0x", false);
-		tty_write(&stdout, model, true);
-		tty_write(&stdout, "Family: 0x", false);
-		tty_write(&stdout, family, true);
+		tty_writeln(&console, stepping);
+		tty_writeln(&console, model);
+		tty_writeln(&console, family);
 
-		tty_flush(&stdout);
+		tty_flush(&console);
 		/*
 		__string_t model = __string_create();
 		char *model_val = __malloc(sizeof(char) * 4);

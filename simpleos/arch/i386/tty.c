@@ -1,6 +1,7 @@
 
-#include <simpleos/tty.h>
-#include <malloc.h>
+#include <asm/tty.h>
+
+#include <stdlib.h>
 #include <string.h>
 
 void tty_scroll(tty_t *tty) {
@@ -79,7 +80,7 @@ tty_t tty_init() {
             .x = 0,
             .y = 0
         },
-        .color = TTY_COLOR(COLOR_GREEN, COLOR_BLACK),
+        .color = TTY_COLOR(COLOR_CYAN, COLOR_BLACK),
         .width = TTY_DEFAULT_WIDTH,
         .height = TTY_DEFAULT_HEIGHT,
         .buffer = (char *)malloc(sizeof(char) * tty.width * tty.height)

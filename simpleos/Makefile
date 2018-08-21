@@ -81,9 +81,10 @@ install: install-headers install-kernel
 install-headers:
 	mkdir -p $(DESTDIR)$(INCLUDEDIR)
 	cp -R --preserve=timestamps include/. $(DESTDIR)$(INCLUDEDIR)/.
+	cp -R --preserve=timestamps $(ARCHDIR)/include/. $(DESTDIR)$(INCLUDEDIR)/.
 
 install-kernel: simpleos.kernel
 	mkdir -p $(DESTDIR)$(BOOTDIR)
-	cp simpleos.kernel $(DESTDIR)$(BOODIR)
+	cp simpleos.kernel $(DESTDIR)$(BOOTDIR)
 
 -include $(OBJS:.o=.d)

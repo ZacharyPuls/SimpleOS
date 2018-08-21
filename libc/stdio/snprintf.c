@@ -2,6 +2,29 @@
 #include <stdio.h>
 #include <string.h>
 
+char *hexstr(int n) {
+	char buf[16]; // TODO: better method that doesn't waste memory on the stack
+	int i = 15;
+    int j = 0;
+
+	buf[i--] = "0";
+	buf[i--] = "x";
+
+    do {
+        buf[i] = "0123456789ABCDEF"[n % 16];
+        i--;
+        n /= 16;
+    } while(n > 0);
+
+    while( ++i < 13){
+       buf[j++] = buf[i];
+    }
+
+    buf[j] = 0;
+
+	return buf;
+}
+
 /**
  * @brief Composes a string with the same text that would be printed if fmt was
  *  used on printf, but instead of being printed, the content is stored as a
@@ -70,6 +93,15 @@ int snprintf(char *restrict str, size_t n, const char *restrict fmt, ...) {
             for (int i = 0; i < len; i++) {
                 str[done + i] = str_[i];
             }
+			done += len;
+		} else if (*fmt == 'x') {
+			fmt++;
+			int i = va_arg(parameters, int);
+			const char *hexstr_ = hexstr(i);
+			size_t len = strlen(hexstr_);
+			for (int x = 0; x < len; x++) {
+				str[done + x] = hexstr_[x];
+			}
 			done += len;
 		} else {
 			fmt = fmt_begun_at;
