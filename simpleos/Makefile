@@ -1,36 +1,31 @@
-SHELL = /bin/sh
+DEFAULT_HOST!=../default-host.sh
+HOST?=DEFAULT_HOST
+HOSTARCH!=../target-triplet-to-arch.sh $(HOST)
 
-DEFAULT_HOST := $(shell ../default-host.sh)
-HOST ?= DEFAULT_HOST
-HOSTARCH = $(shell ../target-triplet-to-arch.sh $(HOST))
-
-DESTDIR ?=
-PREFIX ?= /usr/local
-EXEC_PREFIX ?= $(PREFIX)
-BOOTDIR ?= $(EXEC_PREFIX)/boot
-INCLUDEDIR ?= $(PREFIX)/include
-ARCHDIR = arch/$(HOSTARCH)
+DESTDIR?=
+PREFIX?=/usr/local
+EXEC_PREFIX?=$(PREFIX)
+BOOTDIR?=$(EXEC_PREFIX)/boot
+INCLUDEDIR?=$(PREFIX)/include
+ARCHDIR=arch/$(HOSTARCH)
 LIBS ?=
 
-CFLAGS ?= -O2 -g
-CXXFLAGS ?=
-LDFLAGS ?=
+CFLAGS?=-O2 -g
+CXXFLAGS?=
+LDFLAGS?=
 
-DEFAULT_CFLAGS = -ffreestanding -Wall -Wextra
-DEFAULT_CXXFLAGS = -Iinclude
+DEFAULT_CFLAGS:=-ffreestanding -Wall -Wextra
+DEFAULT_CXXFLAGS:=-Iinclude
 
-ALL_CFLAGS = $(CFLAGS) $(DEFAULT_CFLAGS)
-ALL_CXXFLAGS = $(CXXFLAGS) $(DEFAULT_CXXFLAGS)
+ALL_CFLAGS=$(CFLAGS) $(DEFAULT_CFLAGS)
+ALL_CXXFLAGS=$(CXXFLAGS) $(DEFAULT_CXXFLAGS)
 
 include $(ARCHDIR)/configs/$(HOSTARCH).cfg
 
-ALL_CFLAGS += $(KERNEL_ARCH_CFLAGS)
-ALL_CXXFLAGS += $(KERNEL_ARCH_CXXFLAGS)
-
-KERNEL_CFLAGS = $(ALL_CFLAGS)
-KERNEL_CXXFLAGS = $(ALL_CXXFLAGS) -D__SIMPLEOS_KERNEL__
-KERNEL_LDFLAGS = $(LDFLAGS) $(KERNEL_ARCH_LDFLAGS)
-KERNEL_LIBS = $(LIBS) -nostdlib -lsos -lgcc
+KERNEL_CFLAGS:=$(ALL_CFLAGS) $(KERNEL_ARCH_CFLAGS)
+KERNEL_CXXFLAGS:=$(ALL_CXXFLAGS) $(KERNEL_ARCH_CXXFLAGS) -D__SIMPLEOS_KERNEL__
+KERNEL_LDFLAGS:=$(LDFLAGS) $(KERNEL_ARCH_LDFLAGS)
+KERNEL_LIBS:=$(LIBS) -nostdlib -lsos -lgcc $(KERNEL_ARCH_LIBS)
 
 KERNEL_OBJS=\
 $(KERNEL_ARCH_OBJS) \
@@ -54,21 +49,21 @@ $(ARCHDIR)/crtn.o \
 
 .PHONY: all clean install install-headers install-kernel
 .SUFFIXES:
-.SUFFIXES: .c .o .S
+.SUFFIXES: .o .c .S
 
 all: simpleos.kernel
 
-simpleos.kernel: $(OBJS) $(ARCHDIR)/link.ld 
+simpleos.kernel: $(OBJS) $(ARCHDIR)/link.ld
 	$(CC) -T $(ARCHDIR)/link.ld -o $@ $(KERNEL_CFLAGS) $(LINK_LIST)
 	grub-file --is-x86-multiboot simpleos.kernel
 
-$(ARCHDIR)/crtbegin.o $(ARCHDIR)/crtend.o: 
+$(ARCHDIR)/crtbegin.o $(ARCHDIR)/crtend.o:
 	OBJ=`$(CC) $(KERNEL_CFLAGS) $(KERNEL_LDFLAGS) -print-file-name=$(@F)` && cp "$$OBJ" $@
 
-.c.o: 
+.c.o:
 	$(CC) -MD -c $< -o $@ -std=gnu11 $(KERNEL_CFLAGS) $(KERNEL_CXXFLAGS)
 
-.S.o: 
+.S.o:
 	$(CC) -MD -c $< -o $@ $(KERNEL_CFLAGS) $(KERNEL_CXXFLAGS)
 
 clean:
