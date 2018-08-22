@@ -3,12 +3,13 @@
 set -e
 . ./build.sh
 
-mkdir -p isodir/boot/grub
+mkdir -p iso/boot/grub
 
-cp sysroot/boot/simpleos.kernel isodir/boot/simpleos.kernel
-cat > isodir/boot/grub/grub.cfg << EOF
+cp sysroot/boot/simpleos.kernel iso/boot/simpleos.kernel
+cat > iso/boot/grub/grub.cfg << EOF
+set timeout=0
 menuentry "simpleos" {
     multiboot /boot/simpleos.kernel
 }
 EOF
-grub-mkrescue -o simpleos.iso isodir
+grub-mkrescue -o simpleos.iso iso

@@ -4,7 +4,8 @@
 #include <string.h>
 
 char *hexstr(unsigned int n) {
-	char *buf = (char *)malloc(sizeof(char) * 16); // TODO: better method that doesn't waste memory on the stack
+	// char *buf = (char *)malloc(sizeof(char) * 16); // TODO: better method that doesn't waste memory on the stack
+	char buf[16];
 	unsigned int base = 16;
 	unsigned int d = 1;
 	int x = 0;
@@ -18,13 +19,23 @@ char *hexstr(unsigned int n) {
 		n %= d;
 		d /= base;
 		if (x || dgt > 0 || d == 0) {
-			*buf++ = dgt + (dgt < 10 ? '0' : 'A' - 10);
-			++x;
+			buf[x++] = dgt + (dgt < 10 ? '0' : 'A' - 10);
 		}
 	}
 
 	*buf = 0;
 	return buf;
+}
+
+char *htoa(uint8_t n) {
+	static char hexvalues[16] = {
+		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
+	};
+	char *str = (char *)malloc(sizeof(char) * 3);
+	str[0] = hexvalues[n >> 4];
+	str[1] = hexvalues[n];
+	str[2] = '\0';
+	return str;
 }
 
 /**
@@ -64,20 +75,38 @@ int snprintf(char *restrict str, size_t n, const char *restrict fmt, ...) {
 				case 'X':
 					type = 1;
 					break;
+				case 'i':
+				case 'I':
+					type = 2;
+					break;
+				case 's':
+				case 'S':
+					type = 3;
+					break;
 				default:
 					break;
 			}
 			if (type == 1) {
-				char *buf = hexstr(va_arg(parameters, unsigned int));
+				char *buf = htoa((uint8_t)va_arg(parameters, uint32_t));
 				size_t len = strlen(buf);
 				for (size_t i = 0; i < len; i++) {
-					str[done + i] = buf[i];
+					str[done++] = buf[i];
 				}
-				done += len;
+			} else if (type == 2) {
+				str[done++] = va_arg(parameters, uint32_t);
+			} else if (type == 3) {
+				char *buf = va_arg(parameters, char *);
+				size_t len = strlen(buf);
+				for (size_t i = 0; i < len; i++) {
+					str[done++] = buf[i];
+				}
 			}
 		}
 	}
+	
     va_end(parameters);
+
+	str[done++] = '\0';
 
     return done;
 }

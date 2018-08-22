@@ -38,9 +38,21 @@ void __kmain(void) {
 		tty_writeln(&console, family);		
 		*/
 
+		char *family = (char *)malloc(sizeof(char) * 32);
+		snprintf(family, 32, "Family: 0x%x", cpuinfo.family_id);
+		tty_writeln(&console, family);
+
+		char *model = (char *)malloc(sizeof(char) * 32);
+		snprintf(model, 32, "Model: 0x%x", cpuinfo.model_id);
+		tty_writeln(&console, model);
+
 		char *stepping = (char *)malloc(sizeof(char) * 32);
-		stepping = snprintf(stepping, 32, "Stepping: 0x%X", cpuinfo.stepping_id);
+		snprintf(stepping, 32, "Stepping: 0x%x", cpuinfo.stepping_id);
 		tty_writeln(&console, stepping);
+
+		tty_writeln(&console, cpuinfo.brand_string);
+		tty_writeln(&console, "\n");
+		tty_writeln(&console, "Booting user-mode O/S...\n");
 
 	} else {
 		tty_writeln(&console, "CPUID Instruction is not supported.\n");

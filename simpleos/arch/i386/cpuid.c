@@ -57,12 +57,11 @@ uint32_t __get_cpuid_max_extended_input_value() {
 }
 
 char *__parse_brandinfo_segment(uint32_t segment) {
-    char buf[4] = {
-        segment & 0x000000FF,
-        segment & 0x0000FF00,
-        segment & 0x00FF0000,
-        segment & 0xFF000000
-    };
+    char *buf = (char *)malloc(sizeof(char) * 4);
+    buf[0] = (char)(segment & 0x000000FF);
+    buf[1] = (char)(segment & 0x0000FF00);
+    buf[2] = (char)(segment & 0x00FF0000);
+    buf[3] = (char)(segment & 0xFF000000);
     return buf;
 }
 
@@ -72,20 +71,57 @@ char *__get_cpuid_brandinfo() {
     if (maxinput & __CPUID_OPERATION_EXTENDED_INFORMATION__) {
         // Brand string method supported.
         __cpuid_t string = __get_cpuid(__CPUID_OPERATION_BRAND_STRING_A__);
-        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.eax));
-        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.ebx));
-        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.ecx));
-        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.edx));
+        int i = 0;
+        brandinfo[i++] = (string.eax >> 24) & 0xFF;
+        brandinfo[i++] = (string.eax >> 16) & 0xFF;
+        brandinfo[i++] = (string.eax >> 8) & 0xFF;
+        brandinfo[i++] = (string.eax) & 0xFF;
+        brandinfo[i++] = (string.ebx >> 24) & 0xFF;
+        brandinfo[i++] = (string.ebx >> 16) & 0xFF;
+        brandinfo[i++] = (string.ebx >> 8) & 0xFF;
+        brandinfo[i++] = (string.ebx) & 0xFF;
+        brandinfo[i++] = (string.ecx >> 24) & 0xFF;
+        brandinfo[i++] = (string.ecx >> 16) & 0xFF;
+        brandinfo[i++] = (string.ecx >> 8) & 0xFF;
+        brandinfo[i++] = (string.ecx) & 0xFF;
+        brandinfo[i++] = (string.edx >> 24) & 0xFF;
+        brandinfo[i++] = (string.edx >> 16) & 0xFF;
+        brandinfo[i++] = (string.edx >> 8) & 0xFF;
+        brandinfo[i++] = (string.edx) & 0xFF;
         string = __get_cpuid(__CPUID_OPERATION_BRAND_STRING_B__);
-        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.eax));
-        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.ebx));
-        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.ecx));
-        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.edx));
+        brandinfo[i++] = (string.eax >> 24) & 0xFF;
+        brandinfo[i++] = (string.eax >> 16) & 0xFF;
+        brandinfo[i++] = (string.eax >> 8) & 0xFF;
+        brandinfo[i++] = (string.eax) & 0xFF;
+        brandinfo[i++] = (string.ebx >> 24) & 0xFF;
+        brandinfo[i++] = (string.ebx >> 16) & 0xFF;
+        brandinfo[i++] = (string.ebx >> 8) & 0xFF;
+        brandinfo[i++] = (string.ebx) & 0xFF;
+        brandinfo[i++] = (string.ecx >> 24) & 0xFF;
+        brandinfo[i++] = (string.ecx >> 16) & 0xFF;
+        brandinfo[i++] = (string.ecx >> 8) & 0xFF;
+        brandinfo[i++] = (string.ecx) & 0xFF;
+        brandinfo[i++] = (string.edx >> 24) & 0xFF;
+        brandinfo[i++] = (string.edx >> 16) & 0xFF;
+        brandinfo[i++] = (string.edx >> 8) & 0xFF;
+        brandinfo[i++] = (string.edx) & 0xFF;
         string = __get_cpuid(__CPUID_OPERATION_BRAND_STRING_C__);
-        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.eax));
-        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.ebx));
-        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.ecx));
-        brandinfo = strcat(brandinfo, __parse_brandinfo_segment(string.edx));
+        brandinfo[i++] = (string.eax >> 24) & 0xFF;
+        brandinfo[i++] = (string.eax >> 16) & 0xFF;
+        brandinfo[i++] = (string.eax >> 8) & 0xFF;
+        brandinfo[i++] = (string.eax) & 0xFF;
+        brandinfo[i++] = (string.ebx >> 24) & 0xFF;
+        brandinfo[i++] = (string.ebx >> 16) & 0xFF;
+        brandinfo[i++] = (string.ebx >> 8) & 0xFF;
+        brandinfo[i++] = (string.ebx) & 0xFF;
+        brandinfo[i++] = (string.ecx >> 24) & 0xFF;
+        brandinfo[i++] = (string.ecx >> 16) & 0xFF;
+        brandinfo[i++] = (string.ecx >> 8) & 0xFF;
+        brandinfo[i++] = (string.ecx) & 0xFF;
+        brandinfo[i++] = (string.edx >> 24) & 0xFF;
+        brandinfo[i++] = (string.edx >> 16) & 0xFF;
+        brandinfo[i++] = (string.edx >> 8) & 0xFF;
+        brandinfo[i++] = (string.edx) & 0xFF;
     } else {
         // Brand string method unsupported, TODO: fall back to brand index table.
         brandinfo[0] = '\0';
@@ -101,7 +137,7 @@ __cpuinfo_t __get_cpuinfo() {
         .family_id = __CPUID_FAMILY_ID__((cpuid_info.eax & __CPUID_VERSION_FAMILY_ID__), (cpuid_info.eax & __CPUID_VERSION_EXTENDED_FAMILY_ID__)),
         .type = (__processor_type_t)(cpuid_info.eax & __CPUID_VERSION_TYPE__),
         .brand_index = cpuid_info.ebx & __CPUID_VERSION_BRAND_INDEX__,
-        .brand_string = "",
+        .brand_string = __get_cpuid_brandinfo(),
         .clflush_line_size = cpuid_info.ebx & __CPUID_VERSION_CLFLUSH_LINE_SIZE__,
         .max_addressable_ids = cpuid_info.ebx & __CPUID_VERSION_ADDRESSABLE_IDS__,
         .initial_apic_id = cpuid_info.ebx & __CPUID_VERSION_INITIAL_APIC_ID__,

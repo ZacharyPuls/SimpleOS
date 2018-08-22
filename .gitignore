@@ -1,0 +1,6 @@
+*.o
+*.a
+*.d
+simpleos.iso
+simpleos.bin
+simpleos.kernel

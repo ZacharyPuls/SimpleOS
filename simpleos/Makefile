@@ -14,7 +14,7 @@ CFLAGS?=-O2 -g
 CXXFLAGS?=
 LDFLAGS?=
 
-DEFAULT_CFLAGS:=-ffreestanding -Wall -Wextra
+DEFAULT_CFLAGS:=-ffreestanding -Wall -Wextra -Wno-unused-parameter
 DEFAULT_CXXFLAGS:=-Iinclude
 
 ALL_CFLAGS=$(CFLAGS) $(DEFAULT_CFLAGS)

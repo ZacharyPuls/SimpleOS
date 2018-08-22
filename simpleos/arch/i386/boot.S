@@ -28,10 +28,12 @@ __kstart:
 	/* Init stack */
 	mov $stack_top, %esp
 
+	/*
 	movl $0x0342, (0xB8000)
 	movl $0x036F, (0xB8002)
 	movl $0x036F, (0xB8004)
 	movl $0x0374, (0xB0006)
+	*/
 
 	/* TODO: Load GDT, enable paging, C++ exceptions, etc while still in ring 0 and kernel is unloaded */
 
