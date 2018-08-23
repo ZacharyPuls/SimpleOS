@@ -37,6 +37,8 @@ __kstart:
 
 	/* TODO: Load GDT, enable paging, C++ exceptions, etc while still in ring 0 and kernel is unloaded */
 
+	call __init_paging
+
 	/* Enter the kernel. ABI requires a 16-byte aligned stack at the time of the call instruction,
 	   return pointer of size 4bytes will be pushed. */
 	call __kmain

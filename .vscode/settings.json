@@ -13,5 +13,13 @@
         "malloc.h": "c",
         "stdlib.h": "c"
     },
-    "files.eol": "\n"
+    "files.eol": "\n",
+    "files.exclude": {
+        "iso/**": true,
+        "sysroot/**": true,
+        "*.iso": true,
+        "**/**.o": true,
+        "**/**.d": true,
+        "**/lib**.a": true
+    }
 }

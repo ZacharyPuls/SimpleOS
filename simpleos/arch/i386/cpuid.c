@@ -1,4 +1,3 @@
-
 #include <asm/cpuid.h>
 
 #include <stdbool.h>
@@ -72,56 +71,56 @@ char *__get_cpuid_brandinfo() {
         // Brand string method supported.
         __cpuid_t string = __get_cpuid(__CPUID_OPERATION_BRAND_STRING_A__);
         int i = 0;
-        brandinfo[i++] = (string.eax >> 24) & 0xFF;
-        brandinfo[i++] = (string.eax >> 16) & 0xFF;
-        brandinfo[i++] = (string.eax >> 8) & 0xFF;
         brandinfo[i++] = (string.eax) & 0xFF;
-        brandinfo[i++] = (string.ebx >> 24) & 0xFF;
-        brandinfo[i++] = (string.ebx >> 16) & 0xFF;
-        brandinfo[i++] = (string.ebx >> 8) & 0xFF;
+        brandinfo[i++] = (string.eax >> 8) & 0xFF;
+        brandinfo[i++] = (string.eax >> 16) & 0xFF;
+        brandinfo[i++] = (string.eax >> 24) & 0xFF;
         brandinfo[i++] = (string.ebx) & 0xFF;
-        brandinfo[i++] = (string.ecx >> 24) & 0xFF;
-        brandinfo[i++] = (string.ecx >> 16) & 0xFF;
-        brandinfo[i++] = (string.ecx >> 8) & 0xFF;
+        brandinfo[i++] = (string.ebx >> 8) & 0xFF;
+        brandinfo[i++] = (string.ebx >> 16) & 0xFF;
+        brandinfo[i++] = (string.ebx >> 24) & 0xFF;
         brandinfo[i++] = (string.ecx) & 0xFF;
-        brandinfo[i++] = (string.edx >> 24) & 0xFF;
-        brandinfo[i++] = (string.edx >> 16) & 0xFF;
-        brandinfo[i++] = (string.edx >> 8) & 0xFF;
+        brandinfo[i++] = (string.ecx >> 8) & 0xFF;
+        brandinfo[i++] = (string.ecx >> 16) & 0xFF;
+        brandinfo[i++] = (string.ecx >> 24) & 0xFF;
         brandinfo[i++] = (string.edx) & 0xFF;
+        brandinfo[i++] = (string.edx >> 8) & 0xFF;
+        brandinfo[i++] = (string.edx >> 16) & 0xFF;
+        brandinfo[i++] = (string.edx >> 24) & 0xFF;
         string = __get_cpuid(__CPUID_OPERATION_BRAND_STRING_B__);
-        brandinfo[i++] = (string.eax >> 24) & 0xFF;
-        brandinfo[i++] = (string.eax >> 16) & 0xFF;
-        brandinfo[i++] = (string.eax >> 8) & 0xFF;
         brandinfo[i++] = (string.eax) & 0xFF;
-        brandinfo[i++] = (string.ebx >> 24) & 0xFF;
-        brandinfo[i++] = (string.ebx >> 16) & 0xFF;
-        brandinfo[i++] = (string.ebx >> 8) & 0xFF;
+        brandinfo[i++] = (string.eax >> 8) & 0xFF;
+        brandinfo[i++] = (string.eax >> 16) & 0xFF;
+        brandinfo[i++] = (string.eax >> 24) & 0xFF;
         brandinfo[i++] = (string.ebx) & 0xFF;
-        brandinfo[i++] = (string.ecx >> 24) & 0xFF;
-        brandinfo[i++] = (string.ecx >> 16) & 0xFF;
-        brandinfo[i++] = (string.ecx >> 8) & 0xFF;
+        brandinfo[i++] = (string.ebx >> 8) & 0xFF;
+        brandinfo[i++] = (string.ebx >> 16) & 0xFF;
+        brandinfo[i++] = (string.ebx >> 24) & 0xFF;
         brandinfo[i++] = (string.ecx) & 0xFF;
-        brandinfo[i++] = (string.edx >> 24) & 0xFF;
-        brandinfo[i++] = (string.edx >> 16) & 0xFF;
-        brandinfo[i++] = (string.edx >> 8) & 0xFF;
+        brandinfo[i++] = (string.ecx >> 8) & 0xFF;
+        brandinfo[i++] = (string.ecx >> 16) & 0xFF;
+        brandinfo[i++] = (string.ecx >> 24) & 0xFF;
         brandinfo[i++] = (string.edx) & 0xFF;
+        brandinfo[i++] = (string.edx >> 8) & 0xFF;
+        brandinfo[i++] = (string.edx >> 16) & 0xFF;
+        brandinfo[i++] = (string.edx >> 24) & 0xFF;
         string = __get_cpuid(__CPUID_OPERATION_BRAND_STRING_C__);
-        brandinfo[i++] = (string.eax >> 24) & 0xFF;
-        brandinfo[i++] = (string.eax >> 16) & 0xFF;
-        brandinfo[i++] = (string.eax >> 8) & 0xFF;
         brandinfo[i++] = (string.eax) & 0xFF;
-        brandinfo[i++] = (string.ebx >> 24) & 0xFF;
-        brandinfo[i++] = (string.ebx >> 16) & 0xFF;
-        brandinfo[i++] = (string.ebx >> 8) & 0xFF;
+        brandinfo[i++] = (string.eax >> 8) & 0xFF;
+        brandinfo[i++] = (string.eax >> 16) & 0xFF;
+        brandinfo[i++] = (string.eax >> 24) & 0xFF;
         brandinfo[i++] = (string.ebx) & 0xFF;
-        brandinfo[i++] = (string.ecx >> 24) & 0xFF;
-        brandinfo[i++] = (string.ecx >> 16) & 0xFF;
-        brandinfo[i++] = (string.ecx >> 8) & 0xFF;
+        brandinfo[i++] = (string.ebx >> 8) & 0xFF;
+        brandinfo[i++] = (string.ebx >> 16) & 0xFF;
+        brandinfo[i++] = (string.ebx >> 24) & 0xFF;
         brandinfo[i++] = (string.ecx) & 0xFF;
-        brandinfo[i++] = (string.edx >> 24) & 0xFF;
-        brandinfo[i++] = (string.edx >> 16) & 0xFF;
-        brandinfo[i++] = (string.edx >> 8) & 0xFF;
+        brandinfo[i++] = (string.ecx >> 8) & 0xFF;
+        brandinfo[i++] = (string.ecx >> 16) & 0xFF;
+        brandinfo[i++] = (string.ecx >> 24) & 0xFF;
         brandinfo[i++] = (string.edx) & 0xFF;
+        brandinfo[i++] = (string.edx >> 8) & 0xFF;
+        brandinfo[i++] = (string.edx >> 16) & 0xFF;
+        brandinfo[i++] = (string.edx >> 24) & 0xFF;
     } else {
         // Brand string method unsupported, TODO: fall back to brand index table.
         brandinfo[0] = '\0';

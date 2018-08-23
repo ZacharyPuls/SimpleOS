@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <asm/paging.h>
 
 typedef struct __memory_map {
     uint32_t base;
