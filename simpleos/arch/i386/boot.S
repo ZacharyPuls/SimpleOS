@@ -52,6 +52,6 @@ __kstart:
 	   just in case, jmp back to the hlt instruction if it ever breaks due to a non-maskable interrupt */
 	cli
 1:	hlt
-	jmp 1b
+	jmp 1
 
 .size __kstart, . - __kstart
