@@ -38,6 +38,10 @@ void tty_write(tty_t *tty, char ch) {
 		tty_advance(tty, -tty->cursor.x, 1);
 		return;
 	}
+	if (ch == '\t') {
+		tty_advance(tty, 4, 0);
+		return;
+	}
 	const size_t idx = tty->cursor.y * tty->width + tty->cursor.x;
 	tty->buffer[idx] = ch;
 	tty_advance(tty, 1, 0);
@@ -50,7 +54,7 @@ void tty_writeln(tty_t *tty, const char *line) {
 		tty_write(tty, line[i]);
 	}
 
-	tty_advance(tty, -tty->cursor.x, 1);
+	tty_flush(tty);
 }
 
 void tty_clear(tty_t *tty) {

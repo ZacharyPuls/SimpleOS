@@ -78,9 +78,8 @@ typedef uint32_t __pde_t;
 typedef uint32_t __pte_t;
 
 extern void __init_paging();
-extern uint32_t __get_physical_address(uint32_t logical_address);
-extern void __mark_page_used(uint32_t logical_address);
-extern void __mark_page_free(uint32_t logical_address);
-extern uint32_t __get_free_page(uint32_t size);
+extern uint32_t __get_physical_address(const uint32_t);
+extern void __toggle_page_dirty(const uint32_t);
+extern uint32_t __get_free_page(const uint32_t);
 
 #endif

@@ -28,13 +28,13 @@ void __init_paging() {
     );
 }
 
-uint32_t __get_physical_address(uint32_t logical_address) {
+uint32_t __get_physical_address(const uint32_t logical_address) {
     uint32_t physical_address = 0;
 
     return physical_address;
 }
 
-inline __pde_t __get_pde(uint32_t logical_address) {
+inline __pde_t __get_pde(const uint32_t logical_address) {
     const void *pd_base_addr = (void *)(&__page_directory[0]);
     const uint32_t pde_address = ((uint32_t)pd_base_addr) + LOGICALADDR_PDE_OFFSET(logical_address);
 
@@ -49,7 +49,7 @@ inline __pde_t __get_pde(uint32_t logical_address) {
     return out_pde_address;
 }
 
-inline __pte_t __get_pte(uint32_t logical_address, __pde_t pde) {
+inline __pte_t __get_pte(const uint32_t logical_address, const __pde_t pde) {
     const uint32_t pt_base_addr = PDE_PTE(pde);
     const uint32_t pte_address = pt_base_addr + LOGICALADDR_PTE_OFFSET(logical_address);
 
@@ -64,11 +64,11 @@ inline __pte_t __get_pte(uint32_t logical_address, __pde_t pde) {
     return out_pte_address;
 }
 
-inline void *__get_page(uint32_t logical_address, __pte_t pte) {
+inline void *__get_page(const uint32_t logical_address, const __pte_t pte) {
     const uint32_t pg_base_addr = PTE_ADDR(pte);
     const uint32_t pg_address = pg_base_addr + LOGICALADDR_PGE_OFFSET(logical_address);
 
-    uint32_t out_pg_address;
+    uint32_t out_pg_address; 
 
     __asm__ __volatile__ (
         "mov (%0), %1\n"
@@ -80,20 +80,27 @@ inline void *__get_page(uint32_t logical_address, __pte_t pte) {
     return out_pg_address;
 }
 
-void __mark_page_used(uint32_t logical_address) {
-
+void __toggle_page_dirty(const uint32_t physical_address) {
+    for (uint32_t i = 0; i < 1024; i++) {
+        if (PTE_ADDR(__page_table_0[i]) == physical_address) {
+            __page_table_0[i] &= ~PTE_DIRTY;
+        }
+    }
 }
 
-void __mark_page_free(uint32_t logical_address) {
-
-}
-
-uint32_t __get_free_page(uint32_t size) {
+uint32_t __get_free_page(const uint32_t size) {
     // TODO: Scan the rest of the page tables, after we allocate more than just one
     // TODO: Optimization
+    // TODO: If size > 4096, allocate two or more pages.
+    uint32_t free_page_addr;
+
     for (uint32_t i = 0; i < 1024; i++) {
-        uint32_t logical_address = PTE_ADDR(__page_table_0[i]);
+        if (PTE_D(__page_table_0[i])) {
+            continue;
+        }
+        free_page_addr = PTE_ADDR(__page_table_0[i]);
+        break;
     }
 
-    return 0;
+    return free_page_addr;
 }

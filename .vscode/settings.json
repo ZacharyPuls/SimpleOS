@@ -11,7 +11,9 @@
         "signal.h": "c",
         "stdbool.h": "c",
         "malloc.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "gdt.h": "c",
+        "idt.h": "c"
     },
     "files.eol": "\n",
     "files.exclude": {
