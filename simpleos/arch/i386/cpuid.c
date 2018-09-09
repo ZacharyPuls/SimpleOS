@@ -52,24 +52,24 @@ __cpuid_t __get_cpuid(const uint32_t command) {
 }
 
 uint32_t __get_cpuid_max_extended_input_value() {
-    return __get_cpuid(__CPUID_OPERATION_EXTENDED_INFORMATION__).eax;
+    return __get_cpuid(CPUID_OPERATION_EXTENDED_INFORMATION).eax;
 }
 
 char *__parse_brandinfo_segment(uint32_t segment) {
     char *buf = (char *)malloc(sizeof(char) * 4);
     buf[0] = (char)(segment & 0x000000FF);
-    buf[1] = (char)(segment & 0x0000FF00);
-    buf[2] = (char)(segment & 0x00FF0000);
-    buf[3] = (char)(segment & 0xFF000000);
+    buf[1] = (char)((segment & 0x0000FF00) >> 8);
+    buf[2] = (char)((segment & 0x00FF0000) >> 16);
+    buf[3] = (char)((segment & 0xFF000000) >> 24);
     return buf;
 }
 
 char *__get_cpuid_brandinfo() {
     char *brandinfo = (char *)malloc(sizeof(char) * 48);
     uint32_t maxinput = __get_cpuid_max_extended_input_value();
-    if (maxinput & __CPUID_OPERATION_EXTENDED_INFORMATION__) {
+    if (maxinput & CPUID_OPERATION_EXTENDED_INFORMATION) {
         // Brand string method supported.
-        __cpuid_t string = __get_cpuid(__CPUID_OPERATION_BRAND_STRING_A__);
+        __cpuid_t string = __get_cpuid(CPUID_OPERATION_BRAND_STRING_A);
         int i = 0;
         brandinfo[i++] = (string.eax) & 0xFF;
         brandinfo[i++] = (string.eax >> 8) & 0xFF;
@@ -87,7 +87,7 @@ char *__get_cpuid_brandinfo() {
         brandinfo[i++] = (string.edx >> 8) & 0xFF;
         brandinfo[i++] = (string.edx >> 16) & 0xFF;
         brandinfo[i++] = (string.edx >> 24) & 0xFF;
-        string = __get_cpuid(__CPUID_OPERATION_BRAND_STRING_B__);
+        string = __get_cpuid(CPUID_OPERATION_BRAND_STRING_B);
         brandinfo[i++] = (string.eax) & 0xFF;
         brandinfo[i++] = (string.eax >> 8) & 0xFF;
         brandinfo[i++] = (string.eax >> 16) & 0xFF;
@@ -104,7 +104,7 @@ char *__get_cpuid_brandinfo() {
         brandinfo[i++] = (string.edx >> 8) & 0xFF;
         brandinfo[i++] = (string.edx >> 16) & 0xFF;
         brandinfo[i++] = (string.edx >> 24) & 0xFF;
-        string = __get_cpuid(__CPUID_OPERATION_BRAND_STRING_C__);
+        string = __get_cpuid(CPUID_OPERATION_BRAND_STRING_C);
         brandinfo[i++] = (string.eax) & 0xFF;
         brandinfo[i++] = (string.eax >> 8) & 0xFF;
         brandinfo[i++] = (string.eax >> 16) & 0xFF;
@@ -123,23 +123,44 @@ char *__get_cpuid_brandinfo() {
         brandinfo[i++] = (string.edx >> 24) & 0xFF;
     } else {
         // Brand string method unsupported, TODO: fall back to brand index table.
-        brandinfo[0] = '\0';
+        brandinfo[0] = 'U';
+        brandinfo[1] = 'n';
+        brandinfo[2] = 's';
+        brandinfo[3] = 'u';
+        brandinfo[4] = 'p';
+        brandinfo[5] = 'p';
+        brandinfo[6] = 'o';
+        brandinfo[7] = 'r';
+        brandinfo[8] = 't';
+        brandinfo[9] = 'e';
+        brandinfo[10] = 'd';
+        brandinfo[11] = ' ';
+        brandinfo[12] = 'P';
+        brandinfo[13] = 'r';
+        brandinfo[14] = 'o';
+        brandinfo[15] = 'c';
+        brandinfo[16] = 'e';
+        brandinfo[17] = 's';
+        brandinfo[18] = 's';
+        brandinfo[19] = 'o';
+        brandinfo[20] = 'r';
+        brandinfo[21] = '\0';
     }
     return brandinfo;
 }
 
 __cpuinfo_t __get_cpuinfo() {
-    __cpuid_t cpuid_info = __get_cpuid(__CPUID_OPERATION_VERSION_AND_FEATURE_INFORMATION__);
+    __cpuid_t cpuid_info = __get_cpuid(CPUID_OPERATION_VERSION_AND_FEATURE_INFORMATION);
     __cpuinfo_t cpuinfo = {
-        .stepping_id = cpuid_info.eax & __CPUID_VERSION_STEPPING_ID__,
-        .model_id = __CPUID_MODEL_ID__((cpuid_info.eax & __CPUID_VERSION_MODEL_ID__), (cpuid_info.eax & __CPUID_VERSION_EXTENDED_MODEL_ID__)),
-        .family_id = __CPUID_FAMILY_ID__((cpuid_info.eax & __CPUID_VERSION_FAMILY_ID__), (cpuid_info.eax & __CPUID_VERSION_EXTENDED_FAMILY_ID__)),
-        .type = (__processor_type_t)(cpuid_info.eax & __CPUID_VERSION_TYPE__),
-        .brand_index = cpuid_info.ebx & __CPUID_VERSION_BRAND_INDEX__,
+        .stepping_id = cpuid_info.eax & CPUID_VERSION_STEPPING_ID,
+        .model_id = CPUID_MODEL_ID((cpuid_info.eax & CPUID_VERSION_MODEL_ID) >> 4, (cpuid_info.eax & CPUID_VERSION_EXTENDED_MODEL_ID) >> 16),
+        .family_id = CPUID_FAMILY_ID((cpuid_info.eax & CPUID_VERSION_FAMILY_ID) >> 8, (cpuid_info.eax & CPUID_VERSION_EXTENDED_FAMILY_ID) >> 20),
+        .type = (__processor_type_t)((cpuid_info.eax & CPUID_VERSION_TYPE) >> 12),
+        .brand_index = cpuid_info.ebx & CPUID_VERSION_BRAND_INDEX,
         .brand_string = __get_cpuid_brandinfo(),
-        .clflush_line_size = cpuid_info.ebx & __CPUID_VERSION_CLFLUSH_LINE_SIZE__,
-        .max_addressable_ids = cpuid_info.ebx & __CPUID_VERSION_ADDRESSABLE_IDS__,
-        .initial_apic_id = cpuid_info.ebx & __CPUID_VERSION_INITIAL_APIC_ID__,
+        .clflush_line_size = (cpuid_info.ebx & CPUID_VERSION_CLFLUSH_LINE_SIZE) >> 8,
+        .max_addressable_ids = (cpuid_info.ebx & CPUID_VERSION_ADDRESSABLE_IDS) >> 16,
+        .initial_apic_id = (cpuid_info.ebx & CPUID_VERSION_INITIAL_APIC_ID) >> 24,
         .supported_features = cpuid_info.ecx,
         .supported_features_ext = cpuid_info.edx
     };    

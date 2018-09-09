@@ -117,18 +117,18 @@ typedef struct __cpuid {
  *  bit 31: PBE                     (Pending Break Enable, support for the use of the FERR#/PBE# pin when the processor is in the stop-clock state [STPCLK# is asserted], which signals the processor that an interrupt is pending and that the processor should return to normal operation to handle it, IA32_MISC_ENABLE MSR [bit 10/PBE enable] controls feature)
  */
 
-#define __CPUID_OPERATION_VERSION_AND_FEATURE_INFORMATION__ 0x00000001
-#define __CPUID_OPERATION_EXTENDED_INFORMATION__            0x80000000
-#define __CPUID_OPERATION_BRAND_STRING_A__                  0x80000002
-#define __CPUID_OPERATION_BRAND_STRING_B__                  0x80000003
-#define __CPUID_OPERATION_BRAND_STRING_C__                  0x80000004
+#define CPUID_OPERATION_VERSION_AND_FEATURE_INFORMATION 0x00000001
+#define CPUID_OPERATION_EXTENDED_INFORMATION            0x80000000
+#define CPUID_OPERATION_BRAND_STRING_A                  0x80000002
+#define CPUID_OPERATION_BRAND_STRING_B                  0x80000003
+#define CPUID_OPERATION_BRAND_STRING_C                  0x80000004
 
-#define __CPUID_VERSION_STEPPING_ID__           0x0000000F
-#define __CPUID_VERSION_MODEL_ID__              0x000000F0
-#define __CPUID_VERSION_FAMILY_ID__             0x00000F00
-#define __CPUID_VERSION_TYPE__                  0x00003000
-#define __CPUID_VERSION_EXTENDED_MODEL_ID__     0x000F0000
-#define __CPUID_VERSION_EXTENDED_FAMILY_ID__    0x00F00000
+#define CPUID_VERSION_STEPPING_ID           0x0000000F
+#define CPUID_VERSION_MODEL_ID              0x000000F0
+#define CPUID_VERSION_FAMILY_ID             0x00000F00
+#define CPUID_VERSION_TYPE                  0x00003000
+#define CPUID_VERSION_EXTENDED_MODEL_ID     0x000F0000
+#define CPUID_VERSION_EXTENDED_FAMILY_ID    0x00F00000
 
 typedef enum __processor_type {
     ORIGINAL_OEM =      0x0,
@@ -137,83 +137,83 @@ typedef enum __processor_type {
     RESERVED =          0x3
 } __processor_type_t;
 
-#define __CPUID_FAMILY_ID__(familyid, familyid_ext) \
+#define CPUID_FAMILY_ID(familyid, familyid_ext) \
         (familyid == 0xF ? (familyid_ext + familyid) : familyid)
 
-#define __CPUID_MODEL_ID__(modelid, modelid_ext) \
+#define CPUID_MODEL_ID(modelid, modelid_ext) \
         (modelid == 0x6 || modelid == 0xF ? ((modelid_ext << 4) + modelid) : modelid)
 
 
-#define __CPUID_VERSION_BRAND_INDEX__       0x000000FF
-#define __CPUID_VERSION_CLFLUSH_LINE_SIZE__ 0x0000FF00
-#define __CPUID_VERSION_ADDRESSABLE_IDS__   0x00FF0000
-#define __CPUID_VERSION_INITIAL_APIC_ID__   0xFF000000
+#define CPUID_VERSION_BRAND_INDEX       0x000000FF
+#define CPUID_VERSION_CLFLUSH_LINE_SIZE 0x0000FF00
+#define CPUID_VERSION_ADDRESSABLE_IDS   0x00FF0000
+#define CPUID_VERSION_INITIAL_APIC_ID   0xFF000000
 
-#define __CPUID_FEATURE_SSE3_               0x00000001
-#define __CPUID_FEATURE_PCLMULQDQ__         0x00000002
-#define __CPUID_FEATURE_DTES64__            0x00000004
-#define __CPUID_FEATURE_MONITOR__           0x00000008
-#define __CPUID_FEATURE_DS_CPL__            0x00000010
-#define __CPUID_FEATURE_VMX__               0x00000020
-#define __CPUID_FEATURE_SMX__               0x00000040
-#define __CPUID_FEATURE_EIST__              0x00000080
-#define __CPUID_FEATURE_TM2__               0x00000100
-#define __CPUID_FEATURE_SSSE3__             0x00000200
-#define __CPUID_FEATURE_CNXT_ID__           0x00000400
-#define __CPUID_FEATURE_SDBG__              0x00000800
-#define __CPUID_FEATURE_FMA__               0x00001000
-#define __CPUID_FEATURE_CMPXCHG16B__        0x00002000
-#define __CPUID_FEATURE_XTPR__              0x00004000
-#define __CPUID_FEATURE_PDCM__              0x00008000
-#define __CPUID_FEATURE_PCID__              0x00020000
-#define __CPUID_FEATURE_DCA__               0x00040000
-#define __CPUID_FEATURE_SSE4_1__            0x00080000
-#define __CPUID_FEATURE_SSE4_2__            0x00100000
-#define __CPUID_FEATURE_x2APIC__            0x00200000
-#define __CPUID_FEATURE_MOVBE__             0x00400000
-#define __CPUID_FEATURE_POPCNT__            0x00800000
-#define __CPUID_FEATURE_TSC_DEADLINE__      0x01000000
-#define __CPUID_FEATURE_AESNI__             0x02000000
-#define __CPUID_FEATURE_XSAVE__             0x04000000
-#define __CPUID_FEATURE_OSXSAVE__           0x08000000
-#define __CPUID_FEATURE_AVX__               0x10000000
-#define __CPUID_FEATURE_F16C__              0x20000000
-#define __CPUID_FEATURE_RDRAND__            0x40000000
+#define CPUID_FEATURE_SSE3              0x00000001
+#define CPUID_FEATURE_PCLMULQDQ         0x00000002
+#define CPUID_FEATURE_DTES64            0x00000004
+#define CPUID_FEATURE_MONITOR           0x00000008
+#define CPUID_FEATURE_DS_CPL            0x00000010
+#define CPUID_FEATURE_VMX               0x00000020
+#define CPUID_FEATURE_SMX               0x00000040
+#define CPUID_FEATURE_EIST              0x00000080
+#define CPUID_FEATURE_TM2               0x00000100
+#define CPUID_FEATURE_SSSE3             0x00000200
+#define CPUID_FEATURE_CNXT_ID           0x00000400
+#define CPUID_FEATURE_SDBG              0x00000800
+#define CPUID_FEATURE_FMA               0x00001000
+#define CPUID_FEATURE_CMPXCHG16B        0x00002000
+#define CPUID_FEATURE_XTPR              0x00004000
+#define CPUID_FEATURE_PDCM              0x00008000
+#define CPUID_FEATURE_PCID              0x00020000
+#define CPUID_FEATURE_DCA               0x00040000
+#define CPUID_FEATURE_SSE4_1            0x00080000
+#define CPUID_FEATURE_SSE4_2            0x00100000
+#define CPUID_FEATURE_x2APIC            0x00200000
+#define CPUID_FEATURE_MOVBE             0x00400000
+#define CPUID_FEATURE_POPCNT            0x00800000
+#define CPUID_FEATURE_TSC_DEADLINE      0x01000000
+#define CPUID_FEATURE_AESNI             0x02000000
+#define CPUID_FEATURE_XSAVE             0x04000000
+#define CPUID_FEATURE_OSXSAVE           0x08000000
+#define CPUID_FEATURE_AVX               0x10000000
+#define CPUID_FEATURE_F16C              0x20000000
+#define CPUID_FEATURE_RDRAND            0x40000000
 
-#define __CPUID_FEATURE_FPU__               0x00000001
-#define __CPUID_FEATURE_VME__               0x00000002
-#define __CPUID_FEATURE_DE__                0x00000004
-#define __CPUID_FEATURE_PSE__               0x00000008
-#define __CPUID_FEATURE_TSC__               0x00000010
-#define __CPUID_FEATURE_MSR__               0x00000020
-#define __CPUID_FEATURE_PAE__               0x00000040
-#define __CPUID_FEATURE_MCE__               0x00000080
-#define __CPUID_FEATURE_CX8__               0x00000100
-#define __CPUID_FEATURE_APIC__              0x00000200
-#define __CPUID_FEATURE_SEP__               0x00000800
-#define __CPUID_FEATURE_MTRR__              0x00001000
-#define __CPUID_FEATURE_PGE__               0x00002000
-#define __CPUID_FEATURE_MCA__               0x00004000
-#define __CPUID_FEATURE_CMOV__              0x00008000
-#define __CPUID_FEATURE_PAT__               0x00010000
-#define __CPUID_FEATURE_PSE_36__            0x00020000
-#define __CPUID_FEATURE_PSN__               0x00040000
-#define __CPUID_FEATURE_CLFSH__             0x00080000
-#define __CPUID_FEATURE_DS__                0x00200000
-#define __CPUID_FEATURE_ACPI__              0x00400000
-#define __CPUID_FEATURE_MMX__               0x00800000
-#define __CPUID_FEATURE_FXSR__              0x01000000
-#define __CPUID_FEATURE_SSE__               0x02000000
-#define __CPUID_FEATURE_SSE2__              0x04000000
-#define __CPUID_FEATURE_SS__                0x08000000
-#define __CPUID_FEATURE_HTT__               0x10000000
-#define __CPUID_FEATURE_TM__                0x20000000
-#define __CPUID_FEATURE_PBE__               0x80000000
+#define CPUID_FEATURE_FPU               0x00000001
+#define CPUID_FEATURE_VME               0x00000002
+#define CPUID_FEATURE_DE                0x00000004
+#define CPUID_FEATURE_PSE               0x00000008
+#define CPUID_FEATURE_TSC               0x00000010
+#define CPUID_FEATURE_MSR               0x00000020
+#define CPUID_FEATURE_PAE               0x00000040
+#define CPUID_FEATURE_MCE               0x00000080
+#define CPUID_FEATURE_CX8               0x00000100
+#define CPUID_FEATURE_APIC              0x00000200
+#define CPUID_FEATURE_SEP               0x00000800
+#define CPUID_FEATURE_MTRR              0x00001000
+#define CPUID_FEATURE_PGE               0x00002000
+#define CPUID_FEATURE_MCA               0x00004000
+#define CPUID_FEATURE_CMOV              0x00008000
+#define CPUID_FEATURE_PAT               0x00010000
+#define CPUID_FEATURE_PSE_36            0x00020000
+#define CPUID_FEATURE_PSN               0x00040000
+#define CPUID_FEATURE_CLFSH             0x00080000
+#define CPUID_FEATURE_DS                0x00200000
+#define CPUID_FEATURE_ACPI              0x00400000
+#define CPUID_FEATURE_MMX               0x00800000
+#define CPUID_FEATURE_FXSR              0x01000000
+#define CPUID_FEATURE_SSE               0x02000000
+#define CPUID_FEATURE_SSE2              0x04000000
+#define CPUID_FEATURE_SS                0x08000000
+#define CPUID_FEATURE_HTT               0x10000000
+#define CPUID_FEATURE_TM                0x20000000
+#define CPUID_FEATURE_PBE               0x80000000
 
-#define __CPUID_FEATURE_SUPPORTED__(x, feature) \
+#define CPUID_FEATURE_SUPPORTED(x, feature) \
     ((bool)(x & feature ? true : false))
 
-#define __CPUID_BRAND_STRING_FREQUENCY_MULTIPLIER__(x) \
+#define CPUID_BRAND_STRING_FREQUENCY_MULTIPLIER(x) \
     ((x == "zHM") ? 1e6 : (x == "zHG") ? 1e9 : (x == "zHT") ? 1e12 : 0)
 
 typedef struct __cpuinfo {

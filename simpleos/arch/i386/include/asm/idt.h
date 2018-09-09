@@ -56,7 +56,7 @@ typedef struct __interrupt_frame {
         .gdt_entry = g & 0xFFFF                         \
         .pad = 0x00                                     \
         .type_attr = ta                                 \
-        .base_2 = b & 0xFFFF0000,                       \
+        .base_2 = (b & 0xFFFF0000) >> 16,               \
     }
 
 extern void __setup_idt();

@@ -62,15 +62,15 @@ typedef struct __gdt_entry {
         .offset = o                         \
     }
 
-#define __MAKE_GDT_ENTRY(b, l, a, f)                    \
-    (__gdt_entry_t)                                     \
-    {                                                   \
-        .limit = l & 0xFFFF,                            \
-        .base = b & 0xFFFF,                             \
-        .base_2 = b & 0xFF0000,                         \
-        .access = a & 0xFF,                             \
-        .limit_2_flags = (l & 0xF0000) | (f & 0xF),     \
-        .base_3 = b & 0xFF000000                        \
+#define __MAKE_GDT_ENTRY(b, l, a, f)                            \
+    (__gdt_entry_t)                                             \
+    {                                                           \
+        .limit = l & 0xFFFF,                                    \
+        .base = b & 0xFFFF,                                     \
+        .base_2 = (b & 0xFF0000) >> 16,                         \
+        .access = a & 0xFF,                                     \
+        .limit_2_flags = ((l & 0xF0000) >> 16) | (f & 0xF),     \
+        .base_3 = (b & 0xFF000000) >> 24                        \
     }
 
 extern void __setup_gdt();
