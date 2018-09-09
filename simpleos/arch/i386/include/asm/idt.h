@@ -1,3 +1,7 @@
+/**
+ * Copyright 2018 Zachary Puls <zach@zachpuls.com>
+ */
+
 #ifndef __SIMPLEOS_IDT_H__
 #define __SIMPLEOS_IDT_H__
 
@@ -52,14 +56,14 @@ typedef struct __interrupt_frame {
 #define __MAKE_IDT_ENTRY(b, g, ta)                      \
     (__idt_entry_t)                                     \
     {                                                   \
-        .base = b & 0xFFFF,                             \
-        .gdt_entry = g & 0xFFFF                         \
+        .base = b,                                      \
+        .gdt_entry = g                                  \
         .pad = 0x00                                     \
         .type_attr = ta                                 \
-        .base_2 = (b & 0xFFFF0000) >> 16,               \
+        .base_2 = b >> 16,                              \
     }
 
 extern void __setup_idt();
 extern void interrupt_handler(__interrupt_frame_t *);
 
-#endif
+#endif  // __SIMPLEOS_IDT_H__

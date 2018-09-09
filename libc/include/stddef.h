@@ -1,3 +1,7 @@
+/**
+ * Copyright 2018 Zachary Puls <zach@zachpuls.com>
+ */
+
 #ifndef __SIMPLEOS_STDDEF_H__
 #define __SIMPLEOS_STDDEF_H__
 
@@ -10,4 +14,4 @@
 typedef int32_t ptrdiff_t;
 typedef int32_t wchar_t;
 
-#endif
+#endif  // __SIMPLEOS_STDDEF_H__

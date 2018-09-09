@@ -1,3 +1,7 @@
+/**
+ * Copyright 2018 Zachary Puls <zach@zachpuls.com>
+ */
+
 #ifndef __SIMPLEOS_CPUID_H__
 #define __SIMPLEOS_CPUID_H__
 
@@ -234,4 +238,4 @@ extern bool __cpuid_supported();
 extern __cpuid_t __get_cpuid(const uint32_t);
 extern __cpuinfo_t __get_cpuinfo();
 
-#endif
+#endif  // __SIMPLEOS_CPUID_H__

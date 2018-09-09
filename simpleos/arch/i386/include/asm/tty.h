@@ -1,5 +1,9 @@
-#ifndef __SIMPLEOS_TERMINAL_H__
-#define __SIMPLEOS_TERMINAL_H__
+/**
+ * Copyright 2018 Zachary Puls <zach@zachpuls.com>
+ */
+
+#ifndef __SIMPLEOS_TTY_H__
+#define __SIMPLEOS_TTY_H__
 
 #include <stddef.h>
 
@@ -49,4 +53,4 @@ extern void tty_clear(tty_t *);
 extern void tty_flush(tty_t *);
 extern tty_t tty_init();
 
-#endif
+#endif  // __SIMPLEOS_TTY_H__

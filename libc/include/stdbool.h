@@ -1,3 +1,7 @@
+/**
+ * Copyright 2018 Zachary Puls <zach@zachpuls.com>
+ */
+
 #ifndef __SIMPLEOS_STDBOOL_H__
 #define __SIMPLEOS_STDBOOL_H__
 
@@ -7,4 +11,4 @@
 
 #define __bool_true_false_are_defined 1
 
-#endif
+#endif  // __SIMPLEOS_STDBOOL_H__

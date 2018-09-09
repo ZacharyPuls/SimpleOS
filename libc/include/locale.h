@@ -1,3 +1,7 @@
+/**
+ * Copyright 2018 Zachary Puls <zach@zachpuls.com>
+ */
+
 #ifndef __SIMPLEOS_LOCALE_H__
 #define __SIMPLEOS_LOCALE_H__
 
@@ -62,4 +66,4 @@ extern locale_t newlocale(int, const char *, locale_t);
 extern char *setlocale(int, const char *);
 extern locale_t uselocale(locale_t);
 
-#endif
+#endif  // __SIMPLEOS_LOCALE_H__

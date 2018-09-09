@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2018 Zachary Puls <zach@zachpuls.com>
+ */
+
 #ifndef __SIMPLEOS_STDINT_H__
 #define __SIMPLEOS_STDINT_H__
 
@@ -38,4 +42,4 @@ typedef unsigned long uintmax_t;
 
 // #endif
 
-#endif
+#endif  // __SIMPLEOS_STDINT_H__

@@ -1,4 +1,5 @@
 #!/bin/sh
+# Copyright 2018 Zachary Puls <zach@zachpuls.com>
 
 SYSTEM_HEADER_PROJECTS="libc simpleos"
 PROJECTS="libc simpleos"

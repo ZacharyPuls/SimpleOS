@@ -1,3 +1,7 @@
+/**
+ * Copyright 2018 Zachary Puls <zach@zachpuls.com>
+ */
+
 #ifndef __SIMPLEOS_APIC_H__
 #define __SIMPLEOS_APIC_H__
 
@@ -66,4 +70,4 @@
 #define APIC_TIMER_DIVIDE_CONFIGURATION_REGISTER            0x03E0
 //      APIC_RESERVED_REGISTER                              0x03F0
 
-#endif
+#endif  // __SIMPLEOS_APIC_H__

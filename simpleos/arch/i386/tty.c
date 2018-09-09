@@ -1,3 +1,6 @@
+/**
+ * Copyright 2018 Zachary Puls <zach@zachpuls.com>
+ */
 
 #include <asm/tty.h>
 

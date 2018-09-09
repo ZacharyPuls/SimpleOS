@@ -1,3 +1,7 @@
+/**
+ * Copyright 2018 Zachary Puls <zach@zachpuls.com>
+ */
+
 #ifndef __SIMPLEOS_TYPES_H__
 #define __SIMPLEOS_TYPES_H__
 
@@ -47,4 +51,4 @@ union id_t {
     gid_t gid;  
 };
 
-#endif
+#endif  // __SIMPLEOS_TYPES_H__

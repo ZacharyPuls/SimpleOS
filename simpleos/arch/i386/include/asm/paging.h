@@ -1,3 +1,7 @@
+/**
+ * Copyright 2018 Zachary Puls <zach@zachpuls.com>
+ */
+
 #ifndef __SIMPLEOS_PAGING_H__
 #define __SIMPLEOS_PAGING_H__
 
@@ -82,4 +86,4 @@ extern uint32_t __get_physical_address(const uint32_t);
 extern void __toggle_page_dirty(const uint32_t);
 extern uint32_t __get_free_page(const uint32_t);
 
-#endif
+#endif  // __SIMPLEOS_PAGING_H__

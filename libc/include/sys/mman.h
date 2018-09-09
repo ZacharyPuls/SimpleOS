@@ -1,3 +1,7 @@
+/**
+ * Copyright 2018 Zachary Puls <zach@zachpuls.com>
+ */
+
 #ifndef __SIMPLEOS_MMAN_H__
 #define __SIMPLEOS_MMAN_H__
 
@@ -63,4 +67,4 @@ typedef struct __memmap_region {
    * or not the entry is NVRAM (1/set = NVRAM)													   */
 } __memmap_region_t;
 
-#endif
+#endif  // __SIMPLEOS_MMAN_H__

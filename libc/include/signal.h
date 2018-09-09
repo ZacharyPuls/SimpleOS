@@ -1,3 +1,7 @@
+/**
+ * Copyright 2018 Zachary Puls <zach@zachpuls.com>
+ */
+
 #ifndef __SIMPLEOS_SIGNAL_H__
 #define __SIMPLEOS_SIGNAL_H__
 
@@ -33,4 +37,4 @@ typedef struct sigevent {
 
 // TODO: Finish
 
-#endif
+#endif  // __SIMPLEOS_SIGNAL_H__

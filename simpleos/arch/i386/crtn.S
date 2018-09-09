@@ -1,3 +1,7 @@
+/**
+ * Copyright 2018 Zachary Puls <zach@zachpuls.com>
+ */
+
 .section .init
     /* crtend.o .init */
     popl %ebp
@@ -5,3 +9,4 @@
 
 .section .fini
     /* crtend.o .fini */
+    

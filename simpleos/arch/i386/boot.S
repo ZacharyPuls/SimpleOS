@@ -1,3 +1,7 @@
+/**
+ * Copyright 2018 Zachary Puls <zach@zachpuls.com>
+ */
+
 /* Multiboot header - definitions */
 .set ALIGN,	1<<0
 .set MEMINFO,	1<<1

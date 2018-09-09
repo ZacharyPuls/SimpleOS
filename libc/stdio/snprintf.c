@@ -1,3 +1,6 @@
+/**
+ * Copyright (c) 2018 Zachary Puls <zach@zachpuls.com>
+ */
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -1,3 +1,7 @@
+/**
+ * Copyright 2018 Zachary Puls <zach@zachpuls.com>
+ */
+
 #ifndef __SIMPLEOS_GDT_H__
 #define __SIMPLEOS_GDT_H__
 
@@ -75,4 +79,4 @@ typedef struct __gdt_entry {
 
 extern void __setup_gdt();
 
-#endif
+#endif  // __SIMPLEOS_GDT_H__

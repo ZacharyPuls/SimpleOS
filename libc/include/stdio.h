@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2018 Zachary Puls <zach@zachpuls.com>
+ */
+
 #ifndef __SIMPLEOS_STDIO_H__
 #define __SIMPLEOS_STDIO_H__
 
@@ -105,4 +109,4 @@ int      vsprintf(char *restrict, const char *restrict, va_list);
 int      vsscanf(const char *restrict, const char *restrict, va_list);
 */
 
-#endif
+#endif  // __SIMPLEOS_STDIO_H__

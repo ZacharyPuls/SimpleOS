@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2018 Zachary Puls <zach@zachpuls.com>
+ */
+
 #ifndef __SIMPLEOS_STRING_H__
 #define __SIMPLEOS_STRING_H__
 
@@ -39,4 +43,4 @@ extern char *strtok_r(char *restrict, const char *restrict, char **restrict);
 extern size_t strxfrm(char *restrict, const char *restrict, size_t);
 extern size_t strxfrm_l(char *restrict, const char *restrict, size_t, locale_t);
 
-#endif
+#endif  // __SIMPLEOS_STRING_H__

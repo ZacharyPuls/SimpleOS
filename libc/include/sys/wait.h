@@ -1,3 +1,7 @@
+/**
+ * Copyright 2018 Zachary Puls <zach@zachpuls.com>
+ */
+
 #ifndef __SIMPLEOS_WAIT_H__
 #define __SIMPLEOS_WAIT_H__
 
@@ -30,4 +34,4 @@ extern pid_t wait(int *);
 extern int waitid(idtype_t, id_t, siginfo_t *, int);
 extern pid_t waitpid(pid_t, int *, int);
 
-#endif
+#endif  // __SIMPLEOS_WAIT_H__

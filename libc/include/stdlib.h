@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2018 Zachary Puls <zach@zachpuls.com>
+ */
+
 #ifndef __SIMPLEOS_STDLIB_H__
 #define __SIMPLEOS_STDLIB_H__
 
@@ -97,4 +101,4 @@ size_t        wcstombs(char *restrict, const wchar_t *restrict, size_t);
 int           wctomb(char *, wchar_t);*/
 
 
-#endif
+#endif  // __SIMPLEOS_STDLIB_H__
