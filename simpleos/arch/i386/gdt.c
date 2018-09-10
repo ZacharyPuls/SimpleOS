@@ -3,6 +3,7 @@
  */
 
 #include <asm/gdt.h>
+#include <asm/tty.h>
 
 #include <stddef.h>
 #include <stdlib.h>
@@ -30,4 +31,7 @@ void __setup_gdt() {
         : "r"(&__gdtr)
         :
     );
+
+    tty_writeln(__primary_console, "GDT successfully initialized.\n");
+    tty_flush(__primary_console);
 }

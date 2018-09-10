@@ -8,6 +8,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#define __SIMPLEOS_SCSET__ 2
+
 #include <input/scancode.h>
 #include <input/keycode.h>
 

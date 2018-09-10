@@ -6,7 +6,7 @@
 #define __SIMPLEOS_IV_H__
 
 /**
- * 
+ *
  * +--------+----------+--------------------------------------------+------------+-----------------------+---------------------------------------------------------------------+
  * | Vector | Mnemonic |                Description                 |    Type    |      Error Code       |                               Source                                |
  * +--------+----------+--------------------------------------------+------------+-----------------------+---------------------------------------------------------------------+
@@ -35,22 +35,22 @@
  * | 32-255 | -        | User Defined (Non-reserved) Interrupts     | Interrupt  | External interrupt or |                                                                     |
  * |        |          |                                            |            | INT n instruction.    |                                                                     |
  * +--------+----------+--------------------------------------------+------------+-----------------------+---------------------------------------------------------------------+
- * 
+ *
  */
 
 #define IV_DIVIDE_ERROR_FAULT                      0x00
 #define IV_DEBUG_EXCEPTION_FAULT                   0x01
-#define IV_DEBUG_EXCEPTION_TRAP                    IRQ_DEBUG_EXCEPTION_FAULT
+#define IV_DEBUG_EXCEPTION_TRAP                    IV_DEBUG_EXCEPTION_FAULT
 #define IV_NMI_INTERRUPT                           0x02
 #define IV_BREAKPOINT_TRAP                         0x03
 #define IV_OVERFLOW_TRAP                           0x04
 #define IV_BOUND_RANGE_EXCEEDED_FAULT              0x05
 #define IV_INVALID_OPCODE_FAULT                    0x06
-#define IV_UNDEFINED_OPCODE_FAULT                  IRQ_INVALID_OPCODE_FAULT
+#define IV_UNDEFINED_OPCODE_FAULT                  IV_INVALID_OPCODE_FAULT
 #define IV_DEVICE_NOT_AVAILABLE_FAULT              0x07
-#define IV_NO_MATH_COPROCESSOR_FAULT               IRQ_DEVICE_NOT_AVAILABLE_FAULT
+#define IV_NO_MATH_COPROCESSOR_FAULT               IV_DEVICE_NOT_AVAILABLE_FAULT
 #define IV_DOUBLE_FAULT                            0x08
-#define IV_COPROCESSOR_SEGMENT_OVERRUN_FAULT       0x09    // DO NOT USE, RESERVED
+#define IV_COPROCESSOR_SEGMENT_OVERRUN_FAULT       0x09     // Should not be asserted by any processor after the i386
 #define IV_INVALID_TSS_FAULT                       0x0A
 #define IV_SEGMENT_NOT_PRESENT_FAULT               0x0B
 #define IV_STACK_SEGMENT_FAULT                     0x0C
@@ -58,10 +58,10 @@
 #define IV_PAGE_FAULT                              0x0E
 #define IV_RESERVED                                0x0F
 #define IV_MATH_FAULT                              0x10
-#define IV_ALIGNMENT_CHECK_FAULT                   0x11
-#define IV_MACHINE_CHECK_ABORT                     0x12
-#define IV_SIMD_FLOATING_POINT_EXCEPTION_FAULT     0x13
-#define IV_VIRTUALIZATION_EXCEPTION_FAULT          0x14
+#define IV_ALIGNMENT_CHECK_FAULT                   0x11     // Introduced with the i486 processor
+#define IV_MACHINE_CHECK_ABORT                     0x12     // Introduced with the Pentium processor, updated with the P6 family
+#define IV_SIMD_FLOATING_POINT_EXCEPTION_FAULT     0x13     // Introduced with the P3 processor
+#define IV_VIRTUALIZATION_EXCEPTION_FAULT          0x14     // Can only occur on processors that support the 1-setting of the "EPT Violation #VE" VM-execution control
 //      IV_INTEL_RESERVED                          0x15
 //      IV_INTEL_RESERVED                          0x16
 //      IV_INTEL_RESERVED                          0x17
@@ -73,7 +73,11 @@
 //      IV_INTEL_RESERVED                          0x1D
 //      IV_INTEL_RESERVED                          0x1E
 //      IV_INTEL_RESERVED                          0x1F
+
+// User-defined interrupt vectors
 #define IV_KEYBOARD                                0x20
 #define IV_SYSCALL                                 0x80
+
+#define IV_MAX                                     0xFF
 
 #endif  // __SIMPLEOS_IV_H__

@@ -16,7 +16,11 @@
         "idt.h": "c",
         "keycode.h": "c",
         "keyboard.h": "c",
-        "paging.h": "c"
+        "paging.h": "c",
+        "scancode.h": "c",
+        "iv.h": "c",
+        "pic.h": "c",
+        "io.h": "c"
     },
     "files.eol": "\n",
     "files.exclude": {

@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+tty_t *__primary_console;
+
 void tty_scroll(tty_t *tty) {
     memset(tty->buffer, ' ', tty->width);
 

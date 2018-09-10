@@ -22,6 +22,9 @@
 #define IDT_32BIT_INTERRUPT    0xE
 #define IDT_32BIT_TRAP         0xF
 
+#define IDT_DEFAULT_TYPE_ATTR \
+    IDT_USED | IDT_RING_0 | IDT_NONSTORAGE | IDT_32BIT_INTERRUPT
+
 __attribute__((packed))
 typedef struct __idt_descriptor {
     uint16_t size;  // Size is the size of the table, minus one (max of 65535 = 65536 bytes = 8192 entries)
@@ -57,13 +60,34 @@ typedef struct __interrupt_frame {
     (__idt_entry_t)                                     \
     {                                                   \
         .base = b,                                      \
-        .gdt_entry = g                                  \
-        .pad = 0x00                                     \
-        .type_attr = ta                                 \
-        .base_2 = b >> 16,                              \
+        .gdt_entry = g,                                 \
+        .pad = 0x00,                                    \
+        .type_attr = ta,                                \
+        .base_2 = b >> 16                               \
     }
 
 extern void __setup_idt();
-extern void interrupt_handler(__interrupt_frame_t *);
+extern void __isr_divide_error_fault(__interrupt_frame_t *);
+extern void __isr_debug_exception_fault(__interrupt_frame_t *);
+extern void __isr_nmi_interrupt(__interrupt_frame_t *);
+extern void __isr_breakpoint_trap(__interrupt_frame_t *);
+extern void __isr_overflow_trap(__interrupt_frame_t *);
+extern void __isr_bound_range_exceeded_fault(__interrupt_frame_t *);
+extern void __isr_invalid_opcode_fault(__interrupt_frame_t *);
+extern void __isr_device_not_available_fault(__interrupt_frame_t *);
+extern void __isr_double_fault(__interrupt_frame_t *);
+extern void __isr_coprocessor_segment_overrun_fault(__interrupt_frame_t *);
+extern void __isr_invalid_tss_fault(__interrupt_frame_t *);
+extern void __isr_segment_not_present_fault(__interrupt_frame_t *);
+extern void __isr_stack_segment_fault(__interrupt_frame_t *);
+extern void __isr_general_protection_fault(__interrupt_frame_t *);
+extern void __isr_page_fault(__interrupt_frame_t *);
+extern void __isr_math_fault(__interrupt_frame_t *);
+extern void __isr_alignment_check_fault(__interrupt_frame_t *);
+extern void __isr_machine_check_abort(__interrupt_frame_t *);
+extern void __isr_simd_floating_point_exception_fault(__interrupt_frame_t *);
+extern void __isr_virtualization_exception_fault(__interrupt_frame_t *);
+extern void __isr_keyboard(__interrupt_frame_t *);
+extern void __isr_syscall(__interrupt_frame_t *);
 
 #endif  // __SIMPLEOS_IDT_H__

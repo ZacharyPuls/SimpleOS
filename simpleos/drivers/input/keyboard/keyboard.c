@@ -14,5 +14,5 @@ bool __query_key_state(uint8_t keycode) {
 
 void __handle_keyboard_input(uint8_t scancode) {
     // scancode >= SC_KEY_ESCAPE && scancode <= SC_FUN_TWELVE
-    __key_state[scancode] = scancode < SC_KEY_ESCAPE_R;
+    __key_state[scancode] = scancode <= SC_MAX;
 }

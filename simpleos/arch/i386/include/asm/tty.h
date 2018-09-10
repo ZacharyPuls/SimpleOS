@@ -53,4 +53,6 @@ extern void tty_clear(tty_t *);
 extern void tty_flush(tty_t *);
 extern tty_t tty_init();
 
+extern tty_t *__primary_console;
+
 #endif  // __SIMPLEOS_TTY_H__
