@@ -31,12 +31,12 @@
 #define PIC_SEND_EOI(irq) \
     OUTB(irq >= 8 ? SLAVE_PIC_COMMAND : MASTER_PIC_COMMAND, PIC_EOI)
 
-static inline void PIC_REMAP(int offsetMaster, int offsetSlave) {
-    uint8_t masterMask;
-    uint8_t slaveMask;
+static inline void PIC_REMAP(int offsetMaster, int masterMask, int offsetSlave, int slaveMask) {
+    uint8_t oldMasterMask;
+    uint8_t oldSlaveMask;
 
-    INB(MASTER_PIC_DATA, masterMask);
-    INB(SLAVE_PIC_DATA, slaveMask);
+    INB(MASTER_PIC_DATA, oldMasterMask);
+    INB(SLAVE_PIC_DATA, oldSlaveMask);
 
     OUTB(MASTER_PIC_COMMAND, ICW1_INIT + ICW1_ICW4);
     IOWAIT();

@@ -18,7 +18,7 @@ const char *OS_VERSION_STRING = "SimpleOS v0.1.0\n    Running SimpleKernel v0.1.
 static tty_t console;
 
 void __kinit(void) {
-    PIC_REMAP(IV_KEYBOARD, IV_KEYBOARD + 8);
+    PIC_REMAP(IV_KEYBOARD, 0xF9 | 0x08, IV_KEYBOARD + 8, 0xEF);
     console = tty_init();
     __primary_console = &console;
 }

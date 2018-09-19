@@ -68,121 +68,140 @@ __attribute__((interrupt))
 void __isr_divide_error_fault(__interrupt_frame_t *frame) {
     tty_writeln(__primary_console, "IV_DIVIDE_ERROR_FAULT triggered\n");
     tty_flush(__primary_console);
+    PIC_SEND_EOI(IV_DIVIDE_ERROR_FAULT);
 }
 
 __attribute__((interrupt))
 void __isr_debug_exception_fault(__interrupt_frame_t *frame) {
     tty_writeln(__primary_console, "IV_DEBUG_EXCEPTION_FAULT triggered\n");
     tty_flush(__primary_console);
+    PIC_SEND_EOI(IV_DEBUG_EXCEPTION_FAULT);
 }
 
 __attribute__((interrupt))
 void __isr_nmi_interrupt(__interrupt_frame_t *frame) {
     tty_writeln(__primary_console, "IV_NMI_INTERRUPT triggered\n");
     tty_flush(__primary_console);
+    PIC_SEND_EOI(IV_NMI_INTERRUPT);
 }
 
 __attribute__((interrupt))
 void __isr_breakpoint_trap(__interrupt_frame_t *frame) {
     tty_writeln(__primary_console, "IV_BREAKPOINT_TRAP triggered\n");
     tty_flush(__primary_console);
+    PIC_SEND_EOI(IV_BREAKPOINT_TRAP);
 }
 
 __attribute__((interrupt))
 void __isr_overflow_trap(__interrupt_frame_t *frame) {
     tty_writeln(__primary_console, "IV_OVERFLOW_TRAP triggered\n");
     tty_flush(__primary_console);
+    PIC_SEND_EOI(IV_OVERFLOW_TRAP);
 }
 
 __attribute__((interrupt))
 void __isr_bound_range_exceeded_fault(__interrupt_frame_t *frame) {
     tty_writeln(__primary_console, "IV_BOUND_RANGE_EXCEEDED_FAULT triggered\n");
     tty_flush(__primary_console);
+    PIC_SEND_EOI(IV_BOUND_RANGE_EXCEEDED_FAULT);
 }
 
 __attribute__((interrupt))
 void __isr_invalid_opcode_fault(__interrupt_frame_t *frame) {
     tty_writeln(__primary_console, "IV_INVALID_OPCODE_FAULT triggered\n");
     tty_flush(__primary_console);
+    PIC_SEND_EOI(IV_INVALID_OPCODE_FAULT);
 }
 
 __attribute__((interrupt))
 void __isr_device_not_available_fault(__interrupt_frame_t *frame) {
     tty_writeln(__primary_console, "IV_DEVICE_NOT_AVAILABLE_FAULT triggered\n");
     tty_flush(__primary_console);
+    PIC_SEND_EOI(IV_DEVICE_NOT_AVAILABLE_FAULT);
 }
 
 __attribute__((interrupt))
 void __isr_double_fault(__interrupt_frame_t *frame) {
     tty_writeln(__primary_console, "IV_DOUBLE_FAULT triggered\n");
     tty_flush(__primary_console);
+    PIC_SEND_EOI(IV_DOUBLE_FAULT);
 }
 
 __attribute__((interrupt))
 void __isr_coprocessor_segment_overrun_fault(__interrupt_frame_t *frame) {
     tty_writeln(__primary_console, "IV_COPROCESSOR_SEGMENT_OVERRUN_FAULT triggered\n");
     tty_flush(__primary_console);
+    PIC_SEND_EOI(IV_COPROCESSOR_SEGMENT_OVERRUN_FAULT);
 }
 
 __attribute__((interrupt))
 void __isr_invalid_tss_fault(__interrupt_frame_t *frame) {
     tty_writeln(__primary_console, "IV_INVALID_TSS_FAULT triggered\n");
     tty_flush(__primary_console);
+    PIC_SEND_EOI(IV_INVALID_TSS_FAULT);
 }
 
 __attribute__((interrupt))
 void __isr_segment_not_present_fault(__interrupt_frame_t *frame) {
     tty_writeln(__primary_console, "IV_SEGMENT_NOT_PRESENT_FAULT triggered\n");
     tty_flush(__primary_console);
+    PIC_SEND_EOI(IV_SEGMENT_NOT_PRESENT_FAULT);
 }
 
 __attribute__((interrupt))
 void __isr_stack_segment_fault(__interrupt_frame_t *frame) {
     tty_writeln(__primary_console, "IV_STACK_SEGMENT_FAULT triggered\n");
     tty_flush(__primary_console);
+    PIC_SEND_EOI(IV_STACK_SEGMENT_FAULT);
 }
 
 __attribute__((interrupt))
 void __isr_general_protection_fault(__interrupt_frame_t *frame) {
     tty_writeln(__primary_console, "IV_GENERAL_PROTECTION_FAULT triggered\n");
     tty_flush(__primary_console);
-
+    PIC_SEND_EOI(IV_GENERAL_PROTECTION_FAULT);
 }
 
 __attribute__((interrupt))
 void __isr_page_fault(__interrupt_frame_t *frame) {
     tty_writeln(__primary_console, "IV_PAGE_FAULT triggered\n");
     tty_flush(__primary_console);
+    PIC_SEND_EOI(IV_PAGE_FAULT);
 }
 
 __attribute__((interrupt))
 void __isr_math_fault(__interrupt_frame_t *frame) {
     tty_writeln(__primary_console, "IV_MATH_FAULT triggered\n");
     tty_flush(__primary_console);
+    PIC_SEND_EOI(IV_MATH_FAULT);
 }
 
 __attribute__((interrupt))
 void __isr_alignment_check_fault(__interrupt_frame_t *frame) {
     tty_writeln(__primary_console, "IV_ALIGNMENT_CHECK_FAULT triggered\n");
     tty_flush(__primary_console);
+    PIC_SEND_EOI(IV_ALIGNMENT_CHECK_FAULT);
 }
 
 __attribute__((interrupt))
 void __isr_machine_check_abort(__interrupt_frame_t *frame) {
     tty_writeln(__primary_console, "IV_MACHINE_CHECK_ABORT triggered\n");
     tty_flush(__primary_console);
+    PIC_SEND_EOI(IV_MACHINE_CHECK_ABORT);
 }
 
 __attribute__((interrupt))
 void __isr_simd_floating_point_exception_fault(__interrupt_frame_t *frame) {
     tty_writeln(__primary_console, "IV_SIMD_FLOATING_POINT_EXCEPTION_FAULT triggered\n");
     tty_flush(__primary_console);
+    PIC_SEND_EOI(IV_SIMD_FLOATING_POINT_EXCEPTION_FAULT);
 }
 
 __attribute__((interrupt))
 void __isr_virtualization_exception_fault(__interrupt_frame_t *frame) {
     tty_writeln(__primary_console, "IV_VIRTUALIZATION_EXCEPTION_FAULT triggered\n");
     tty_flush(__primary_console);
+    PIC_SEND_EOI(IV_VIRTUALIZATION_EXCEPTION_FAULT);
 }
 
 __attribute__((interrupt))
@@ -196,4 +215,5 @@ __attribute__((interrupt))
 void __isr_syscall(__interrupt_frame_t *frame) {
     tty_writeln(__primary_console, "IV_SYSCALL triggered\n");
     tty_flush(__primary_console);
+    PIC_SEND_EOI(IV_SYSCALL);
 }
