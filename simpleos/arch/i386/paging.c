@@ -19,6 +19,13 @@ void __init_paging() {
     __page_directory[0] = ((__pde_t)__page_table_0) | (PDE_PRESENT | PDE_READWRITE | PDE_ACCESS_SUPERVISOR);
 
     // May still have to push cr0/cr3 into a scratch register, set val, then pop onto cr0/cr3
+    
+    __asm__ __volatile__("mov %%eax, %%cr3" : : "a"(__page_directory));
+    __asm__ __volatile__("mov %cr0, %eax");
+    __asm__ __volatile__("orl $0x80000000, %eax");
+    __asm__ __volatile__("mov %eax, %cr0");
+    
+    /*
     __asm__ __volatile__ (
         "mov %0, %%eax\n"
         "mov %%eax, %%cr3\n"
@@ -29,11 +36,14 @@ void __init_paging() {
         : "r" (__page_directory)
         : "eax"
     );
+    */
 }
 
 uint32_t __get_physical_address(const uint32_t logical_address) {
     uint32_t physical_address = 0;
-
+    // __pde_t pde = __get_pde(logical_address);
+    // __pte_t pte = __get_pte(logical_address, pde);
+    
     return physical_address;
 }
 

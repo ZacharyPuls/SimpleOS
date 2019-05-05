@@ -7,61 +7,107 @@
 #include <asm/pic.h>
 #include <asm/tty.h>
 
+#include <input/keyboard.h>
+
 #include <stddef.h>
 #include <stdlib.h>
+#include <stdio.h>
 
-static __idt_entry_t *__idt;
+uint32_t idt_offset = 0x1410;
+uint32_t idtr_offset = 0x500;
 
-void __setup_idt() {
+__attribute__((interrupt))
+void irq0(__interrupt_frame_t *frame) {
+    OUTB(0x20, 0x20);
+}
 
-    if (__idt) {
-        // TODO: IDT has already been initialized, throw exception (LOL) or PANIC
+__attribute__((interrupt))
+void irq1(__interrupt_frame_t *frame) {
+    uint8_t val;
+    INB(0x60, val);
+    if (val <= SC_KEY_ESCAPE_R) {
+        tty_write(__primary_console, __scancode_to_alpha(val));
+        tty_flush(__primary_console);
     }
+    OUTB(0x20, 0x20);
+}
 
-    const size_t idt_size = sizeof(__idt_entry_t) * (IV_MAX + 1);
+__attribute__((interrupt))
+void irq2(__interrupt_frame_t *frame) {
+    OUTB(0x20, 0x20);
+}
 
-    __idt = (__idt_entry_t *) malloc(idt_size);
+__attribute__((interrupt))
+void irq3(__interrupt_frame_t *frame) {
+    OUTB(0x20, 0x20);
+}
 
-    /**
-     * TODO: If we ever end up changing the layout of the GDT, update the GDT
-     * selector index here as well. Currently just using selector 1, which is {
-     * 0x00000000, 0xFFFFFFFF, GDT_EXECUTABLE_READWRITE, GDT_FLAGS_DEFAULT }
-     */
+__attribute__((interrupt))
+void irq4(__interrupt_frame_t *frame) {
+    OUTB(0x20, 0x20);
+}
 
-    __idt[0] = __MAKE_IDT_ENTRY((uint32_t)&__isr_divide_error_fault, 1, IDT_DEFAULT_TYPE_ATTR);
-    __idt[1] = __MAKE_IDT_ENTRY((uint32_t)&__isr_debug_exception_fault, 1, IDT_DEFAULT_TYPE_ATTR);
-    __idt[2] = __MAKE_IDT_ENTRY((uint32_t)&__isr_nmi_interrupt, 1, IDT_DEFAULT_TYPE_ATTR);
-    __idt[3] = __MAKE_IDT_ENTRY((uint32_t)&__isr_breakpoint_trap, 1, IDT_DEFAULT_TYPE_ATTR);
-    __idt[4] = __MAKE_IDT_ENTRY((uint32_t)&__isr_overflow_trap, 1, IDT_DEFAULT_TYPE_ATTR);
-    __idt[5] = __MAKE_IDT_ENTRY((uint32_t)&__isr_bound_range_exceeded_fault, 1, IDT_DEFAULT_TYPE_ATTR);
-    __idt[6] = __MAKE_IDT_ENTRY((uint32_t)&__isr_invalid_opcode_fault, 1, IDT_DEFAULT_TYPE_ATTR);
-    __idt[7] = __MAKE_IDT_ENTRY((uint32_t)&__isr_device_not_available_fault, 1, IDT_DEFAULT_TYPE_ATTR);
-    __idt[8] = __MAKE_IDT_ENTRY((uint32_t)&__isr_double_fault, 1, IDT_DEFAULT_TYPE_ATTR);
-    __idt[9] = __MAKE_IDT_ENTRY((uint32_t)&__isr_coprocessor_segment_overrun_fault, 1, IDT_DEFAULT_TYPE_ATTR);
-    __idt[10] = __MAKE_IDT_ENTRY((uint32_t)&__isr_invalid_tss_fault, 1, IDT_DEFAULT_TYPE_ATTR);
-    __idt[11] = __MAKE_IDT_ENTRY((uint32_t)&__isr_segment_not_present_fault, 1, IDT_DEFAULT_TYPE_ATTR);
-    __idt[12] = __MAKE_IDT_ENTRY((uint32_t)&__isr_stack_segment_fault, 1, IDT_DEFAULT_TYPE_ATTR);
-    __idt[13] = __MAKE_IDT_ENTRY((uint32_t)&__isr_general_protection_fault, 1, IDT_DEFAULT_TYPE_ATTR);
-    __idt[14] = __MAKE_IDT_ENTRY((uint32_t)&__isr_page_fault, 1, IDT_DEFAULT_TYPE_ATTR);
-    __idt[15] = __MAKE_IDT_ENTRY((uint32_t)&__isr_math_fault, 1, IDT_DEFAULT_TYPE_ATTR);
-    __idt[16] = __MAKE_IDT_ENTRY((uint32_t)&__isr_alignment_check_fault, 1, IDT_DEFAULT_TYPE_ATTR);
-    __idt[17] = __MAKE_IDT_ENTRY((uint32_t)&__isr_machine_check_abort, 1, IDT_DEFAULT_TYPE_ATTR);
-    __idt[18] = __MAKE_IDT_ENTRY((uint32_t)&__isr_simd_floating_point_exception_fault, 1, IDT_DEFAULT_TYPE_ATTR);
-    __idt[19] = __MAKE_IDT_ENTRY((uint32_t)&__isr_virtualization_exception_fault, 1, IDT_DEFAULT_TYPE_ATTR);
-    __idt[20] = __MAKE_IDT_ENTRY((uint32_t)&__isr_keyboard, 1, IDT_DEFAULT_TYPE_ATTR);
-    __idt[21] = __MAKE_IDT_ENTRY((uint32_t)&__isr_syscall, 1, IDT_DEFAULT_TYPE_ATTR);
+__attribute__((interrupt))
+void irq5(__interrupt_frame_t *frame) {
+    OUTB(0x20, 0x20);
+}
 
-    __idt_descriptor_t __idtr = __MAKE_IDT_DESCRIPTOR(idt_size, (size_t)__idt);
+__attribute__((interrupt))
+void irq6(__interrupt_frame_t *frame) {
+    OUTB(0x20, 0x20);
+}
 
-    __asm__ __volatile__(
-        "lidt (%0)"
-        :
-        : "r"(&__idtr)
-        :
-    );
+__attribute__((interrupt))
+void irq7(__interrupt_frame_t *frame) {
+    OUTB(0x20, 0x20);
+}
 
-    tty_writeln(__primary_console, "IDT successfully initialized.\n");
-    tty_flush(__primary_console);
+__attribute__((interrupt))
+void irq8(__interrupt_frame_t *frame) {
+    OUTB(0xA0, 0x20);
+    OUTB(0x20, 0x20);
+}
+
+__attribute__((interrupt))
+void irq9(__interrupt_frame_t *frame) {
+    OUTB(0xA0, 0x20);
+    OUTB(0x20, 0x20);
+}
+
+__attribute__((interrupt))
+void irq10(__interrupt_frame_t *frame) {
+    OUTB(0xA0, 0x20);
+    OUTB(0x20, 0x20);
+}
+
+__attribute__((interrupt))
+void irq11(__interrupt_frame_t *frame) {
+    OUTB(0xA0, 0x20);
+    OUTB(0x20, 0x20);
+}
+
+__attribute__((interrupt))
+void irq12(__interrupt_frame_t *frame) {
+    OUTB(0xA0, 0x20);
+    OUTB(0x20, 0x20);
+}
+
+__attribute__((interrupt))
+void irq13(__interrupt_frame_t *frame) {
+    OUTB(0xA0, 0x20);
+    OUTB(0x20, 0x20);
+}
+
+__attribute__((interrupt))
+void irq14(__interrupt_frame_t *frame) {
+    OUTB(0xA0, 0x20);
+    OUTB(0x20, 0x20);
+}
+
+__attribute__((interrupt))
+void irq15(__interrupt_frame_t *frame) {
+    OUTB(0xA0, 0x20);
+    OUTB(0x20, 0x20);
 }
 
 __attribute__((interrupt))
@@ -216,4 +262,61 @@ void __isr_syscall(__interrupt_frame_t *frame) {
     tty_writeln(__primary_console, "IV_SYSCALL triggered\n");
     tty_flush(__primary_console);
     PIC_SEND_EOI(IV_SYSCALL);
+}
+
+void register_interrupt_handler(uint8_t i, uint32_t address) {
+    *(uint16_t *)(idt_offset + (i * 8)) = address & 0xFFFF;
+    *(uint16_t *)(idt_offset + (i * 8) + 2) = 0x0008;
+    *(uint16_t *)(idt_offset + (i * 8) + 4) = 0x8E00;
+    *(uint16_t *)(idt_offset + (i * 8) + 6) = (address >> 16) & 0xFFFF;
+}
+
+void __setup_idt() {
+    register_interrupt_handler(0, (uint32_t)&__isr_divide_error_fault);
+    register_interrupt_handler(1, (uint32_t)&__isr_debug_exception_fault);
+    register_interrupt_handler(2, (uint32_t)&__isr_nmi_interrupt);
+    register_interrupt_handler(3, (uint32_t)&__isr_breakpoint_trap);
+    register_interrupt_handler(4, (uint32_t)&__isr_overflow_trap);
+    register_interrupt_handler(5, (uint32_t)&__isr_bound_range_exceeded_fault);
+    register_interrupt_handler(6, (uint32_t)&__isr_invalid_opcode_fault);
+    register_interrupt_handler(7, (uint32_t)&__isr_device_not_available_fault);
+    register_interrupt_handler(8, (uint32_t)&__isr_double_fault);
+    register_interrupt_handler(10, (uint32_t)&__isr_invalid_tss_fault);
+    register_interrupt_handler(11, (uint32_t)&__isr_segment_not_present_fault);
+    register_interrupt_handler(12, (uint32_t)&__isr_stack_segment_fault);
+    register_interrupt_handler(13, (uint32_t)&__isr_general_protection_fault);
+    register_interrupt_handler(14, (uint32_t)&__isr_page_fault);
+    register_interrupt_handler(16, (uint32_t)&__isr_math_fault);
+    register_interrupt_handler(17, (uint32_t)&__isr_alignment_check_fault);
+    register_interrupt_handler(18, (uint32_t)&__isr_machine_check_abort);
+    register_interrupt_handler(19, (uint32_t)&__isr_simd_floating_point_exception_fault);
+    register_interrupt_handler(20, (uint32_t)&__isr_virtualization_exception_fault);
+
+    register_interrupt_handler(32, (uint32_t)&irq0);
+    register_interrupt_handler(33, (uint32_t)&irq1);
+    register_interrupt_handler(34, (uint32_t)&irq2);
+    register_interrupt_handler(35, (uint32_t)&irq3);
+    register_interrupt_handler(36, (uint32_t)&irq4);
+    register_interrupt_handler(37, (uint32_t)&irq5);
+    register_interrupt_handler(38, (uint32_t)&irq6);
+    register_interrupt_handler(39, (uint32_t)&irq7);
+    register_interrupt_handler(40, (uint32_t)&irq8);
+    register_interrupt_handler(41, (uint32_t)&irq9);
+    register_interrupt_handler(42, (uint32_t)&irq10);
+    register_interrupt_handler(43, (uint32_t)&irq11);
+    register_interrupt_handler(44, (uint32_t)&irq12);
+    register_interrupt_handler(45, (uint32_t)&irq13);
+    register_interrupt_handler(46, (uint32_t)&irq14);
+    register_interrupt_handler(47, (uint32_t)&irq15);
+
+    *(uint16_t *)(idtr_offset) = 0x7FF; // 0x0800 - 0x0001
+	*(uint32_t *)(idtr_offset + 2) = idt_offset;
+
+    __asm__ __volatile__(
+        "push %%ebp\n\t"
+        "mov %%esp, %%ebp\n\t"
+        "lidt (%0)\n\t"
+        "mov %%ebp, %%esp\n\t"
+        "pop %%ebp" : : "r"(idtr_offset)
+    );
 }

@@ -42,11 +42,15 @@ typedef struct __idt_entry {
 
 __attribute__((packed))
 typedef struct __interrupt_frame {
-    uint8_t ip;
+/*    uint8_t ip;
     uint8_t cs;
     uint8_t flags;
     uint8_t sp;
-    uint8_t ss;
+    uint8_t ss;*/
+    uint32_t ds;
+    uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax; // Pushed by pusha.
+    uint32_t int_no, err_code;    // Interrupt number and error code (if applicable)
+    uint32_t eip, cs, eflags, useresp, ss; // Pushed by the processor automatically.
 } __interrupt_frame_t;
 
 #define __MAKE_IDT_DESCRIPTOR(s, o)         \
@@ -59,14 +63,15 @@ typedef struct __interrupt_frame {
 #define __MAKE_IDT_ENTRY(b, g, ta)                      \
     (__idt_entry_t)                                     \
     {                                                   \
-        .base = b,                                      \
+        .base = b & 0xFFFF,                             \
         .gdt_entry = g,                                 \
         .pad = 0x00,                                    \
         .type_attr = ta,                                \
-        .base_2 = b >> 16                               \
+        .base_2 = (b >> 16) & 0xFFFF                    \
     }
 
 extern void __setup_idt();
+/*
 extern void __isr_divide_error_fault(__interrupt_frame_t *);
 extern void __isr_debug_exception_fault(__interrupt_frame_t *);
 extern void __isr_nmi_interrupt(__interrupt_frame_t *);
@@ -89,5 +94,23 @@ extern void __isr_simd_floating_point_exception_fault(__interrupt_frame_t *);
 extern void __isr_virtualization_exception_fault(__interrupt_frame_t *);
 extern void __isr_keyboard(__interrupt_frame_t *);
 extern void __isr_syscall(__interrupt_frame_t *);
+*/
+
+void irq0();
+void irq1();
+void irq2();
+void irq3();
+void irq4();
+void irq5();
+void irq6();
+void irq7();
+void irq8();
+void irq9();
+void irq10();
+void irq11();
+void irq12();
+void irq13();
+void irq14();
+void irq15();
 
 #endif  // __SIMPLEOS_IDT_H__

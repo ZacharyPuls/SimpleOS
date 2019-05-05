@@ -51,12 +51,9 @@ typedef struct __gdt_descriptor {
 
 __attribute__((packed))
 typedef struct __gdt_entry {
-    uint16_t limit;
-    uint16_t base;
-    uint8_t base_2;
-    uint8_t access;
-    uint8_t limit_2_flags;
-    uint8_t base_3;
+    uint32_t base;
+    uint32_t limit;
+    uint8_t type;
 } __gdt_entry_t;
 
 #define __MAKE_GDT_DESCRIPTOR(s, o)         \
@@ -77,6 +74,6 @@ typedef struct __gdt_entry {
         .base_3 = (b & 0xFF000000) >> 24                        \
     }
 
-extern void __setup_gdt();
+extern void load_gdt();
 
 #endif  // __SIMPLEOS_GDT_H__

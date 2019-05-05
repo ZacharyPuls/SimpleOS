@@ -7,6 +7,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+/*
+tty_t *__stdout;
+tty_t *__stdin;
+*/
+
 tty_t *__primary_console;
 
 void tty_scroll(tty_t *tty) {
@@ -45,6 +50,12 @@ void tty_write(tty_t *tty, char ch) {
 	}
 	if (ch == '\t') {
 		tty_advance(tty, 4, 0);
+		return;
+	}
+	if (ch == '\b') {
+		tty_advance(tty, -1, 0);
+		const size_t idx = tty->cursor.y * tty->width + tty->cursor.x;
+		tty->buffer[idx] = ' ';
 		return;
 	}
 	const size_t idx = tty->cursor.y * tty->width + tty->cursor.x;

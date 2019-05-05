@@ -181,6 +181,7 @@
 #define SC_NPD_PERIOD_R 0xD3
 #define SC_FUN_ELEVEN_R 0xD7
 #define SC_FUN_TWELVE_R 0xD8
+#define SC_MAX SC_FUN_TWELVE_R
 #pragma endregion
 #elif __SIMPLEOS_SCSET__ == 2
 #pragma region SCANCODE_SET_2

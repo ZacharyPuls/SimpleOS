@@ -31,6 +31,7 @@ KERNEL_LIBS:=$(LIBS) -nostdlib -lsos -lgcc $(KERNEL_ARCH_LIBS)
 
 KERNEL_OBJS=\
 $(KERNEL_ARCH_OBJS) \
+drivers/input/keyboard/keyboard.o \
 kernel.o \
 
 OBJS=\
