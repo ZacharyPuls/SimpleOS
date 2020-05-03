@@ -52,8 +52,10 @@ void __kmain(void) {
         // __init_paging();
         // tty_writeln(__primary_console, "Done.\n");
 
-        tty_writeln(__primary_console, "Enter a command, followed by a newline.\n");
-        tty_writeln(__primary_console, "    > ");
+        tty_writeln(__primary_console, "Enter a command, followed by a newline.");
+        tty_set_user_has_control(__primary_console, true);
+        tty_write(__primary_console, '\n');
+        tty_flush(__primary_console);
         
         __asm__ __volatile__("sti");
     } else {

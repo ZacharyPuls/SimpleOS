@@ -25,10 +25,18 @@ __attribute__((interrupt))
 void irq1(__interrupt_frame_t *frame) {
     uint8_t val;
     INB(0x60, val);
-    if (val <= SC_KEY_ESCAPE_R) {
-        tty_write(__primary_console, __scancode_to_alpha(val));
-        tty_flush(__primary_console);
-    }
+    // if (val <= SC_KEY_ESCAPE_R) {
+    //     tty_write(__primary_console, __scancode_to_alpha(val));
+    //     if (val == SC_KEY_ENTER) {
+    //         tty_write(__primary_console, '\t');
+    //         tty_write(__primary_console, '>');
+    //         tty_write(__primary_console, ' ');
+    //     }
+    //     tty_flush(__primary_console);
+    // }
+
+    __handle_keyboard_input(val);
+
     OUTB(0x20, 0x20);
 }
 

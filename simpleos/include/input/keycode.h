@@ -92,4 +92,11 @@
 #define KC_F12              0x58
 #define KC_LAST             KC_F12
 
+#define KC_IS_MODIFIER(kc) (kc == KC_LCTRL || kc == KC_LSHIFT || kc == KC_RSHIFT || kc == KC_LALT)
+#define KC_IS_TOGGLE(kc) (kc == KC_CAPSLOCK || kc == KC_NUMLOCK || kc == KC_SCROLLLOCK)
+#define KC_IS_FUNCTION(kc) ((kc >= KC_F1 && kc <= KC_F10) || kc == KC_F11 || kc == KC_F12)
+#define KC_IS_PRINTABLE(kc) (!KC_IS_MODIFIER(kc) && !KC_IS_TOGGLE(kc) && !KC_IS_FUNCTION(kc))
+
+#define KC_IS_ALPHA(kc) ((kc >= KC_Q && kc <= KC_P) || (kc >= KC_A && kc <= KC_L) || (kc >= KC_Z && kc <= KC_M))
+
 #endif  // __SIMPLEOS_KEYCODE_H__

@@ -6,6 +6,7 @@
 #define __SIMPLEOS_TTY_H__
 
 #include <stddef.h>
+#include <stdbool.h>
 
 #define COLOR_BLACK 0
 #define COLOR_BLUE 1
@@ -28,6 +29,7 @@
 
 #define TTY_ENTRY(ch, color) ((uint16_t)ch | ((uint16_t)color << 8))
 #define TTY_COLOR(fg, bg) (fg | (bg << 4))
+#define TTY_IDX(x, y, w) (y * w + x)
 
 #define TTY_DEFAULT_WIDTH 80
 #define TTY_DEFAULT_HEIGHT 25
@@ -43,6 +45,8 @@ typedef struct tty {
 	size_t height;
 	uint8_t color;
 	char *buffer;
+	char delim;
+	bool user_has_control;
 } tty_t;
 
 extern void tty_scroll(tty_t *);
@@ -51,8 +55,10 @@ extern void tty_write(tty_t *, char);
 extern void tty_writeln(tty_t *, const char *);
 extern void tty_clear(tty_t *);
 extern void tty_flush(tty_t *);
+extern void tty_set_user_has_control(tty_t *, bool);
 extern tty_t tty_init();
 
 extern tty_t *__primary_console;
+extern tty_t **__active_console;
 
 #endif  // __SIMPLEOS_TTY_H__

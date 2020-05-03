@@ -13,6 +13,9 @@
 
 #define MB_CUR_MAX      ((size_t)1)
 
+#define min(x, y) (x < y ? x : y)
+#define max(x, y) (x > y ? x : y)
+
 typedef struct div {
     int quot;
     int rem;

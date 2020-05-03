@@ -96,6 +96,8 @@
 #define SC_FUN_ELEVEN 0x57
 #define SC_FUN_TWELVE 0x58
 
+#define SC_PRESS SC_FUN_TWELVE
+
 #define SC_KEY_ESCAPE_R 0x81
 #define SC_KEY_ONE_R 0x82
 #define SC_KEY_TWO_R 0x83
@@ -182,6 +184,12 @@
 #define SC_FUN_ELEVEN_R 0xD7
 #define SC_FUN_TWELVE_R 0xD8
 #define SC_MAX SC_FUN_TWELVE_R
+
+#define SC_RELEASE SC_MAX
+
+#define SC_IS_MOD(sc) (sc == SC_MOD_LCTRL || sc == SC_MOD_LSHIFT || sc == SC_MOD_RSHIFT || sc == SC_MOD_LALT)
+#define SC_IS_MOD_R(sc) (sc == SC_MOD_LCTRL_R || sc == SC_MOD_LSHIFT_R || sc == SC_MOD_RSHIFT_R || sc == SC_MOD_LALT_R)
+
 #pragma endregion
 #elif __SIMPLEOS_SCSET__ == 2
 #pragma region SCANCODE_SET_2
