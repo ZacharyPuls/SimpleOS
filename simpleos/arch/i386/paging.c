@@ -7,6 +7,8 @@
 static __pde_t __page_directory[1024] __attribute__((aligned(4096)));
 static __pte_t __page_table_0[1024] __attribute__((aligned(4096)));
 
+bool __paging_initialized = false;
+
 void __init_paging() {
     for (int i = 0; i < 1024; i++) {
         __page_directory[i] = PDE_NOT_PRESENT | PDE_READWRITE | PDE_ACCESS_SUPERVISOR;

@@ -132,3 +132,7 @@ tty_t tty_init() {
     tty_clear(&tty);
     return tty;
 }
+
+void tty_send_command(tty_t *tty, const char *command) {
+
+}

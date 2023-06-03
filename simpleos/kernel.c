@@ -48,9 +48,15 @@ void __kmain(void) {
         __setup_idt();
         tty_writeln(__primary_console, "Done.\n");
 
-        // tty_writeln(__primary_console, "Initializing Paging...");
-        // __init_paging();
-        // tty_writeln(__primary_console, "Done.\n");
+        tty_writeln(__primary_console, "Initializing Paging...");
+//        __init_paging();
+        tty_writeln(__primary_console, "Done.\n");
+
+        char *address = (char*)malloc(128);
+        tty_writeln(__primary_console, "Performing memory allocation self-tests:\n");
+        size_t test_allocation = (size_t)malloc(4096);
+        snprintf(address, 128, "\tAllocating 4KiB of memory...0x%x%x%x%x\n", (test_allocation<<24) & 0xFF, (test_allocation>>16) & 0xFF, (test_allocation>>8) & 0xFF, test_allocation & 0xFF);
+        tty_writeln(__primary_console, address);
 
         tty_writeln(__primary_console, "Enter a command, followed by a newline.");
         tty_set_user_has_control(__primary_console, true);

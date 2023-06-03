@@ -6,6 +6,7 @@
 #define __SIMPLEOS_PAGING_H__
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define PDE_BASEADDR    0x0
 
@@ -85,5 +86,7 @@ extern void __init_paging();
 extern uint32_t __get_physical_address(const uint32_t);
 extern void __toggle_page_dirty(const uint32_t);
 extern uint32_t __get_free_page(const uint32_t);
+
+extern bool __paging_initialized;
 
 #endif  // __SIMPLEOS_PAGING_H__

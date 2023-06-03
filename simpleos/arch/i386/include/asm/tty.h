@@ -57,6 +57,7 @@ extern void tty_clear(tty_t *);
 extern void tty_flush(tty_t *);
 extern void tty_set_user_has_control(tty_t *, bool);
 extern tty_t tty_init();
+extern void tty_send_command(tty_t *, const char *);
 
 extern tty_t *__primary_console;
 extern tty_t **__active_console;

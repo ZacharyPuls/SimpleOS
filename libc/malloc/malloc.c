@@ -26,5 +26,10 @@ uint32_t get_free_addr(size_t size) {
 }
 
 void *malloc(size_t n) {
-    return (void *)get_free_addr(n);
+    if (__paging_initialized) {
+        return (void*) __get_free_page(n);
+    }
+    else {
+        return (void *)get_free_addr(n);
+    }
 }

@@ -26,12 +26,19 @@
         : "d"(port)             \
     )
 
-#define OUTB(port, val)         \
+static inline void OUTB(uint16_t port, uint8_t val) {
+    __asm__ __volatile__(
+            "outb %0, %1"
+            :
+            : "a"(val), "Nd"(port)
+            );
+}
+/*#define OUTB(port, val)         \
     __asm__ __volatile__(       \
         "outb %0, %1"           \
         :                       \
         : "a"(val), "Nd"(port)  \
-    )
+    )*/
 
 #define OUTW(port, val)         \
     __asm__ __volatile__(       \
