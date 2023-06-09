@@ -10,11 +10,13 @@ EXEC_PREFIX?=$(PREFIX)
 BOOTDIR?=$(EXEC_PREFIX)/boot
 INCLUDEDIR?=$(PREFIX)/include
 ARCHDIR=arch/$(HOSTARCH)
+OBJDIR:=obj
+BINDIR:=bin
 LIBS?=
 
 CFLAGS?=-O2 -g
 CXXFLAGS?=
-LDFLAGS?=
+LDFLAGS?=-nostdlib -lsos -lgcc
 
 DEFAULT_CFLAGS:=-ffreestanding -Wall -Wextra -Wno-unused-parameter -mgeneral-regs-only
 DEFAULT_CXXFLAGS:=-Iinclude
@@ -27,52 +29,71 @@ include $(ARCHDIR)/configs/$(HOSTARCH).cfg
 KERNEL_CFLAGS:=$(ALL_CFLAGS) $(KERNEL_ARCH_CFLAGS)
 KERNEL_CXXFLAGS:=$(ALL_CXXFLAGS) $(KERNEL_ARCH_CXXFLAGS) -D__SIMPLEOS_KERNEL__
 KERNEL_LDFLAGS:=$(LDFLAGS) $(KERNEL_ARCH_LDFLAGS)
-KERNEL_LIBS:=$(LIBS) -nostdlib -lsos -lgcc $(KERNEL_ARCH_LIBS)
+KERNEL_LIBS:=$(LIBS) $(KERNEL_ARCH_LIBS)
 
-KERNEL_OBJS=\
-$(KERNEL_ARCH_OBJS) \
-drivers/input/keyboard/keyboard.o \
-kernel.o \
+KERNEL_OBJS:=\
+	$(KERNEL_ARCH_OBJS) \
+	drivers/input/keyboard/keyboard.o \
+	kernel.o
 
-OBJS=\
-$(ARCHDIR)/crti.o \
-$(ARCHDIR)/crtbegin.o \
-$(KERNEL_OBJS) \
-$(ARCHDIR)/crtend.o \
-$(ARCHDIR)/crtn.o \
+OBJS:=\
+$(addprefix $(OBJDIR)/, \
+	$(ARCHDIR)/crti.o \
+	$(ARCHDIR)/crtbegin.o \
+	$(KERNEL_OBJS) \
+	$(ARCHDIR)/crtend.o \
+	$(ARCHDIR)/crtn.o \
+)
 
 LINK_LIST=\
+$(addprefix $(OBJDIR)/, \
+	$(ARCHDIR)/crti.o \
+	$(ARCHDIR)/crtbegin.o \
+	$(KERNEL_OBJS) \
+	$(KERNEL_LIBS) \
+	$(ARCHDIR)/crtend.o \
+	$(ARCHDIR)/crtn.o \
+) \
 $(KERNEL_LDFLAGS) \
-$(ARCHDIR)/crti.o \
-$(ARCHDIR)/crtbegin.o \
-$(KERNEL_OBJS) \
-$(KERNEL_LIBS) \
-$(ARCHDIR)/crtend.o \
-$(ARCHDIR)/crtn.o \
+
+BINS:=$(addprefix $(BINDIR)/, \
+	simpleos.kernel \
+)
 
 .PHONY: all clean install install-headers install-kernel
 .SUFFIXES:
 .SUFFIXES: .o .c .S
 
-all: simpleos.kernel
+all: $(BINS)
 
-simpleos.kernel: $(OBJS) $(ARCHDIR)/link.ld
+$(BINDIR)/simpleos.kernel: $(OBJS) $(ARCHDIR)/link.ld
 	$(CC) -T $(ARCHDIR)/link.ld -o $@ $(KERNEL_CFLAGS) $(LINK_LIST)
-	grub-file --is-x86-multiboot simpleos.kernel
+	grub-file --is-x86-multiboot $(BINDIR)/simpleos.kernel
 
-$(ARCHDIR)/crtbegin.o $(ARCHDIR)/crtend.o:
+$(BINS): | $(BINDIR)
+
+$(BINDIR):
+	mkdir $(BINDIR)
+
+$(OBJDIR)/$(ARCHDIR)/crtbegin.o $(OBJDIR)/$(ARCHDIR)/crtend.o:
 	OBJ=`$(CC) $(KERNEL_CFLAGS) $(KERNEL_LDFLAGS) -print-file-name=$(@F)` && cp "$$OBJ" $@
 
-.c.o:
+$(OBJDIR)/%.o: %.c
+	mkdir -p $(@D)
 	$(CC) -MD -c $< -o $@ -std=gnu11 $(KERNEL_CFLAGS) $(KERNEL_CXXFLAGS)
 
-.S.o:
+$(OBJDIR)/%.o: %.S
+	mkdir -p $(@D)
 	$(CC) -MD -c $< -o $@ $(KERNEL_CFLAGS) $(KERNEL_CXXFLAGS)
 
+$(OBJS): | $(OBJDIR)
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
 clean:
-	rm -f simpleos.kernel
-	rm -f $(OBJS) *.o */*.o */*/*.o
-	rm -f $(OBJS:.o=.d) *.d */*.d */*/*.d
+	rm -rf $(BINDIR)/*
+	rm -rf $(OBJDIR)/*
 
 install: install-headers install-kernel
 
@@ -81,8 +102,8 @@ install-headers:
 	cp -R --preserve=timestamps include/. $(DESTDIR)$(INCLUDEDIR)/.
 	cp -R --preserve=timestamps $(ARCHDIR)/include/. $(DESTDIR)$(INCLUDEDIR)/.
 
-install-kernel: simpleos.kernel
+install-kernel: $(BINDIR)/simpleos.kernel
 	mkdir -p $(DESTDIR)$(BOOTDIR)
-	cp simpleos.kernel $(DESTDIR)$(BOOTDIR)
+	cp $(BINDIR)/simpleos.kernel $(DESTDIR)$(BOOTDIR)
 
 -include $(OBJS:.o=.d)

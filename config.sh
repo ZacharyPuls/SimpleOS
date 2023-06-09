@@ -21,6 +21,7 @@ export CFLAGS="-O2 -g"
 export CXXFLAGS=""
 
 export SYSROOT="$(pwd)/sysroot"
+export ISODIR="$(pwd)/iso"
 export CC="$CC --sysroot=$SYSROOT"
 
 if echo "$HOST" | grep -Eq -- "-elf($|-)"; then

@@ -1,7 +1,7 @@
-*.o
-*.a
-*.d
-simpleos.iso
-simpleos.bin
-simpleos.kernel
-sysroot/*
+libc/bin
+libc/obj
+simpleos/bin
+simpleos/obj
+sysroot/
+iso/
+*.iso
